@@ -69,7 +69,7 @@ while(!feof(fisc)){
   sscanf(line, "%d %s %s %s %s",&id,name,noty,str1,str2); 
   //fill in the Typee
   strcpy(graph[id].Name,name);
-  graph[id].Type=AssignTypee(noty);
+  graph[id].Type=AssignType(noty);
   //fill in fanin and fanout numbers
   if(graph[id].Type!=FROM) {   fout= atoi(str1);  Fin=atoi(str2); }    
   else{                       Fin=fout= 1; strcpy(from,str1);    }   
@@ -117,7 +117,7 @@ return;
 /****************************************************************************************************************************
 Convert (char *) Typee read to (int)     
 ****************************************************************************************************************************/
-int AssignTypee(char *Type)
+int AssignType(char *Type)
 {
 if      ((strcmp(Type,"inpt")==0) || (strcmp(Type,"INPT")==0))       return 1;
 else if ((strcmp(Type,"and")==0)  || (strcmp(Type,"AND")==0))        return 2;
