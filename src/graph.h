@@ -37,6 +37,15 @@ Constant Declarations
 #define BUFF 8				// BUFFER 
 #define NOT  9				// INVERTER 
 #define FROM 10				// STEM BRANCH
+
+// User Defined Constants
+#define TokLen      10       // max length of token
+#define IscLineLen  100			// max length of bench file line
+
+// Bench file line types
+#define INPUT 0
+#define OUTPUT 1
+#define WIRE 2
 /***************************************************************************************************************************
 Structure Declarations 
 ****************************************************************************************************************************/
