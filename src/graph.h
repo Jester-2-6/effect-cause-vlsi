@@ -85,7 +85,7 @@ void FreeList(LIST **);
  NODE Structure Functions
 ****************************************************************************************************************************/
 int ReadIsc(FILE *,NODE *);
-void InitializeCircuit(NODE *,int);
+void InitializeCircuit(NODE *, int);
 int AssignType(char *);
 void PrintCircuit(NODE *,int);
 void ClearCircuit(NODE *,int);
@@ -97,5 +97,9 @@ void ClearCircuit(NODE *,int);
 User Defined Functions in user.c
 ****************************************************************************************************************************/
 void duplicateCircuit(NODE *,int);
-void readBench(NODE *,int);
+int readBench(NODE* , FILE*);
+void LineToGate(char *, NODE *, int *, int *);
+char *extractParenthesis(char *);
+char *extractName(char *);
+int extractFout(char *);
 /****************************************************************************************************************************/

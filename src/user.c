@@ -6,40 +6,67 @@ void duplicateCircuit(NODE* graph, int num) {
 	// TODO: Implement this function
 }
 
-void readBench(NODE* graph, FILE* bench) {
+int readBench(NODE* graph, FILE* bench) {
 	// read the isc file line by line
 	char line[IscLineLen];
 	int line_id = 0;
-	int tot = 0;
+	int total = 0;
+	int *tot = &total;
 	int node_id = 0;
+	int i;
+
+	for(i=0;i<Mnod;i++) { 
+		InitializeCircuit(graph,i); 
+	} 
 
 	while (fgets(line, sizeof(line), bench)) {
-		graph = LineToGate(line, graph, &node_id, &tot);
+		LineToGate(line, graph, &node_id, tot);
 	}
-	printf("Total: %d\n", tot);
+	printf("Total: %d\n", *tot);
 
 	//Return the Maximum node of the Isc file
-	return tot;
+	return *tot;
 }
 
-NODE *LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
-	int node_id_temp;
+void LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
+	int nid_tmp;
 	// skip comment lines
 	if (line[0] == '\n' || line[0] == '#') {
-		return Node;
+		return;
 	} else if (line[0] == 'I') {
-		node_id_temp = atoi(extractParenthesis(line));
-		Node[node_id_temp].Type = INPT;
+		// Handle inputs
+		nid_tmp = atoi(extractParenthesis(line));
+		Node[nid_tmp].Type = INPT;
+		if (nid_tmp > *tot) *tot = nid_tmp;
 	} else if (line[0] == 'O') {
-		node_id_temp = atoi(extractParenthesis(line));
-		Node[node_id_temp].Type = OUTPUT;
+		// Handle outputs
+		nid_tmp = atoi(extractParenthesis(line));
+		Node[nid_tmp].Type = OUTPUT;
+		if (nid_tmp > *tot) *tot = nid_tmp;
 	} else {
+		// Handle gates
 		int fout = extractFout(line);
 		char *name = extractName(line);
 		char *fin = extractParenthesis(line);
-	}
 
-	return Node;
+		if (fout > *tot) *tot = fout;
+		
+		// Assign the type of the gate
+		Node[fout].Type = AssignType(name);
+
+		// Assign the fanin list
+		char *token = strtok(fin, ",");
+		while (token != NULL) {
+			int fin_id = atoi(token);
+			
+			InsertList(&Node[fout].Fin, fin_id);
+			InsertList(&Node[fin_id].Fot, fout);
+			Node[fout].Nfi++;
+			Node[fin_id].Nfo++;
+
+			token = strtok(NULL, ",");
+		}
+	}
 }//end of LineToGate
 
 char *extractParenthesis(char *line) {
