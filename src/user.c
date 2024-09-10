@@ -38,11 +38,13 @@ void LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Type = INPT;
 		if (nid_tmp > *tot) *tot = nid_tmp;
+
 	} else if (line[0] == 'O') {
 		// Handle outputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Type = OUTPUT;
 		if (nid_tmp > *tot) *tot = nid_tmp;
+
 	} else {
 		// Handle gates
 		int fout = extractFout(line);
