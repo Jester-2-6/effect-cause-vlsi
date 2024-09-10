@@ -48,88 +48,98 @@ return;
 /*****************************************************************************************************************************
  Routine to read the Bench Markk(.isc files)
 *****************************************************************************************************************************/
-int ReadIsc(FILE *fisc,NODE *graph)
-{
-char c,noty[Mlin],from[Mlin],str1[Mlin],str2[Mlin],name[Mlin],line[Mlin];
-int  i,id,fid,Fin,fout,mid=0;
+int ReadIsc(FILE *fisc,NODE *graph) {
+	char c,noty[Mlin],from[Mlin],str1[Mlin],str2[Mlin],name[Mlin],line[Mlin];
+	int  i,id,fid,Fin,fout,mid=0;
 
-// intialize all nodes in graph structure
-for(i=0;i<Mnod;i++){ InitializeCircuit(graph,i); } 
-//skip the comment lines 
-do
-fgets(line,Mlin,fisc);
-while(line[0] == '*');
-// read line by line 
-while(!feof(fisc)){
-  //initialize temporary strings 
-  bzero(noty,strlen(noty));    bzero(from,strlen(from));
-  bzero(str1,strlen(str1));    bzero(str2,strlen(str2));   
-  bzero(name,strlen(name));
-  //break line into data 
-  sscanf(line, "%d %s %s %s %s",&id,name,noty,str1,str2); 
-  //fill in the Typee
-  strcpy(graph[id].Name,name);
-  graph[id].Type=AssignTypee(noty);
-  //fill in fanin and fanout numbers
-  if(graph[id].Type!=FROM) {   fout= atoi(str1);  Fin=atoi(str2); }    
-  else{                       Fin=fout= 1; strcpy(from,str1);    }   
-  if(id > mid){ mid=id;  }
-  graph[id].Nfo=fout;  graph[id].Nfi=Fin;
-  if(fout==0){  graph[id].Po=1; }
-  //create fanin and fanout lists   		  
-  switch (graph[id].Type)  {
-    case 0     : printf("ReadIsc: Error in input file (Node %d)\n",id); exit(1);
-    case INPT  : break;
-    case AND   :
-    case NAND  :
-    case OR    :
-    case NOR   :
-    case XOR   :
-    case XNOR  :
-    case BUFF  :
-    case NOT   : for(i=1;i<=Fin;i++) {
-		   fscanf(fisc, "%d", &fid);
-                   InsertList(&graph[id].Fin,fid);  
-                   InsertList(&graph[fid].Fot,id); }  
-		   fscanf(fisc,"\n");  break; 		   	        	   
-    case FROM  : for(i=mid;i>0;i--){
- 	   	   if(graph[i].Type!=0){
-                     if(strcmp(graph[i].Name,from)==0){  fid=i; break; } } }
-                  InsertList(&graph[id].Fin,fid);
-                  InsertList(&graph[fid].Fot,id);   break; 
-    } //end case 
-  bzero(line,strlen(line)); 
-  fgets(line,Mlin,fisc);  
-} // end while 
-return mid;
+	// intialize all nodes in graph structure
+	for(i=0;i<Mnod;i++) { 
+		InitializeCircuit(graph,i); 
+	} 
+	//skip the comment lines 
+	do
+		fgets(line,Mlin,fisc);
+	while(line[0] == '*');
+	// read line by line 
+	while(!feof(fisc)){
+		//initialize temporary strings 
+		bzero(noty,strlen(noty));    bzero(from,strlen(from));
+		bzero(str1,strlen(str1));    bzero(str2,strlen(str2));   
+		bzero(name,strlen(name));
+		//break line into data 
+		sscanf(line, "%d %s %s %s %s",&id,name,noty,str1,str2); 
+		//fill in the Typee
+		strcpy(graph[id].Name,name);
+		graph[id].Type=AssignType(noty);
+		//fill in fanin and fanout numbers
+		if(graph[id].Type!=FROM) {   
+			fout= atoi(str1);  Fin=atoi(str2); 
+		} else {                       
+			Fin=fout= 1; strcpy(from,str1);    
+		}   
+
+		if(id > mid){ 
+			mid=id;  
+		}
+
+		graph[id].Nfo=fout;  graph[id].Nfi=Fin;
+		if(fout==0){  
+			graph[id].Po=1; 
+		}
+		//create fanin and fanout lists   		  
+		switch (graph[id].Type)  {
+			case 0     : printf("ReadIsc: Error in input file (Node %d)\n",id); exit(1);
+			case INPT  : break;
+			case AND   :
+			case NAND  :
+			case OR    :
+			case NOR   :
+			case XOR   :
+			case XNOR  :
+			case BUFF  :
+			case NOT   : for(i=1;i<=Fin;i++) {
+			fscanf(fisc, "%d", &fid);
+						InsertList(&graph[id].Fin,fid);  
+						InsertList(&graph[fid].Fot,id); }  
+			fscanf(fisc,"\n");  break; 		   	        	   
+			case FROM  : for(i=mid;i>0;i--){
+				if(graph[i].Type!=0){
+							if(strcmp(graph[i].Name,from)==0){  fid=i; break; } } }
+						InsertList(&graph[id].Fin,fid);
+						InsertList(&graph[fid].Fot,id);   break; 
+			} //end case 
+		bzero(line,strlen(line)); 
+		fgets(line,Mlin,fisc);  
+	} // end while 
+
+	return mid;
 }//end of ReadIsc 
+
 /****************************************************************************************************************************
 Initialize the paricular memeber of graph structure
 ****************************************************************************************************************************/           
-void InitializeCircuit(NODE *graph,int num)
-{
-bzero(graph[num].Name,Mnam);
-graph[num].Type=graph[num].Nfi=graph[num].Nfo=graph[num].Po=graph[num].Mark=0;  
-graph[num].Cval=graph[num].Fval=3; 
-graph[num].Fin=graph[num].Fot=NULL;   
-return;
+void InitializeCircuit(NODE *graph,int num) {
+	bzero(graph[num].Name,Mnam);
+	graph[num].Type=graph[num].Nfi=graph[num].Nfo=graph[num].Po=graph[num].Mark=0;  
+	graph[num].Cval=graph[num].Fval=3; 
+	graph[num].Fin=graph[num].Fot=NULL;   
+	return;
 }//end of InitializeCircuit 
 /****************************************************************************************************************************
 Convert (char *) Typee read to (int)     
 ****************************************************************************************************************************/
-int AssignTypee(char *Type)
-{
-if      ((strcmp(Type,"inpt")==0) || (strcmp(Type,"INPT")==0))       return 1;
-else if ((strcmp(Type,"and")==0)  || (strcmp(Type,"AND")==0))        return 2;
-else if ((strcmp(Type,"nand")==0) || (strcmp(Type,"NAND")==0))       return 3;
-else if ((strcmp(Type,"or")==0)   || (strcmp(Type,"OR")==0))         return 4;
-else if ((strcmp(Type,"nor")==0)  || (strcmp(Type,"NOR")==0))        return 5;
-else if ((strcmp(Type,"xor")==0)  || (strcmp(Type,"XOR")==0))        return 6;
-else if ((strcmp(Type,"xnor")==0) || (strcmp(Type,"XNOR")==0))       return 7;
-else if ((strcmp(Type,"buff")==0) || (strcmp(Type,"BUFF")==0))       return 8;
-else if ((strcmp(Type,"not")==0)  || (strcmp(Type,"NOT")==0))        return 9;
-else if ((strcmp(Type,"from")==0) || (strcmp(Type,"FROM")==0))       return 10;
-else                          			                   return 0;
+int AssignType(char *Type) {
+	if      ((strcmp(Type,"inpt")==0) || (strcmp(Type,"INPT")==0))       return 1;
+	else if ((strcmp(Type,"and")==0)  || (strcmp(Type,"AND")==0))        return 2;
+	else if ((strcmp(Type,"nand")==0) || (strcmp(Type,"NAND")==0))       return 3;
+	else if ((strcmp(Type,"or")==0)   || (strcmp(Type,"OR")==0))         return 4;
+	else if ((strcmp(Type,"nor")==0)  || (strcmp(Type,"NOR")==0))        return 5;
+	else if ((strcmp(Type,"xor")==0)  || (strcmp(Type,"XOR")==0))        return 6;
+	else if ((strcmp(Type,"xnor")==0) || (strcmp(Type,"XNOR")==0))       return 7;
+	else if ((strcmp(Type,"buff")==0) || (strcmp(Type,"BUFF")==0))       return 8;
+	else if ((strcmp(Type,"not")==0)  || (strcmp(Type,"NOT")==0))        return 9;
+	else if ((strcmp(Type,"from")==0) || (strcmp(Type,"FROM")==0))       return 10;
+	else                          			                   return 0;
 }//end of AssignTypee
 /****************************************************************************************************************************
 Print all members of graph structure(except Type=0) after reading the bench file

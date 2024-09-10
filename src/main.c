@@ -15,11 +15,17 @@ int a,b,c,d;                             //random variables
 
 
 //Read the .isc file and store the information in graph structure
-fisc=fopen(argv[1],"r");                           //file pointer to open .isc file 
-Max=0; 
-Max=ReadIsc(fisc,graph);                 //read .isc file and return index of last node in graph formed
+// fisc=fopen(argv[1],"r");                           //file pointer to open .isc file 
+// Max=0; 
+// Max=ReadIsc(fisc,graph);                 //read .isc file and return index of last node in graph formed
+// fclose(fisc);                            //close file pointer for .isc file
+// PrintCircuit(graph,Max);                 //print all members of graph structure
+
+// Read the .bench file and store the information in graph structure
+fisc = fopen(argv[1], "r");                           //file pointer to open .bench file
+Max = readBench(graph, fisc);                //read .isc file and return index of last node in graph formed
 fclose(fisc);                            //close file pointer for .isc file
-PrintCircuit(graph,Max);                 //print all members of graph structure
+PrintCircuit(graph, Max);                 //print all members of graph structure
 
 //Read the .vec file and store the information in  vector structure
 

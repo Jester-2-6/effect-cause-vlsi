@@ -37,6 +37,15 @@ Constant Declarations
 #define BUFF 8				// BUFFER 
 #define NOT  9				// INVERTER 
 #define FROM 10				// STEM BRANCH
+
+// User Defined Constants
+#define TokLen      10       // max length of token
+#define IscLineLen  100			// max length of bench file line
+
+// Bench file line types
+#define INPUT 0
+#define OUTPUT 1
+#define WIRE 2
 /***************************************************************************************************************************
 Structure Declarations 
 ****************************************************************************************************************************/
@@ -76,7 +85,7 @@ void FreeList(LIST **);
  NODE Structure Functions
 ****************************************************************************************************************************/
 int ReadIsc(FILE *,NODE *);
-void InitializeCircuit(NODE *,int);
+void InitializeCircuit(NODE *, int);
 int AssignType(char *);
 void PrintCircuit(NODE *,int);
 void ClearCircuit(NODE *,int);
@@ -87,5 +96,10 @@ void ClearCircuit(NODE *,int);
 /***************************************************************************************************************************
 User Defined Functions in user.c
 ****************************************************************************************************************************/
-
+void duplicateCircuit(NODE *,int);
+int readBench(NODE* , FILE*);
+void LineToGate(char *, NODE *, int *, int *);
+char *extractParenthesis(char *);
+char *extractName(char *);
+int extractFout(char *);
 /****************************************************************************************************************************/
