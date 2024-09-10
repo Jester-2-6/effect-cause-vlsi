@@ -11,15 +11,16 @@ int readBench(NODE* graph, FILE* bench) {
 	char line[IscLineLen];
 	int line_id = 0;
 	int total = 0;
-	int *tot = &total;
+	int* tot = &total;
 	int node_id = 0;
 	int i;
 
-	for(i=0;i<Mnod;i++) { 
-		InitializeCircuit(graph,i); 
-	} 
+	for (i = 0;i < Mnod;i++) {
+		InitializeCircuit(graph, i);
+	}
 
 	while (fgets(line, sizeof(line), bench)) {
+		printf("%s", line);
 		LineToGate(line, graph, &node_id, tot);
 	}
 	printf("Total: %d\n", *tot);
@@ -28,7 +29,7 @@ int readBench(NODE* graph, FILE* bench) {
 	return *tot;
 }
 
-void LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
+void LineToGate(char* line, NODE* Node, int* node_id_ptr, int* tot) {
 	int nid_tmp;
 	// skip comment lines
 	if (line[0] == '\n' || line[0] == '#') {
@@ -48,19 +49,19 @@ void LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
 	} else {
 		// Handle gates
 		int fout = extractFout(line);
-		char *name = extractName(line);
-		char *fin = extractParenthesis(line);
+		char* name = extractName(line);
+		char* fin = extractParenthesis(line);
 
 		if (fout > *tot) *tot = fout;
-		
+
 		// Assign the type of the gate
 		Node[fout].Type = AssignType(name);
 
 		// Assign the fanin list
-		char *token = strtok(fin, ",");
+		char* token = strtok(fin, ",");
 		while (token != NULL) {
 			int fin_id = atoi(token);
-			
+
 			InsertList(&Node[fout].Fin, fin_id);
 			InsertList(&Node[fin_id].Fot, fout);
 			Node[fout].Nfi++;
@@ -71,13 +72,13 @@ void LineToGate(char *line, NODE *Node, int *node_id_ptr, int *tot) {
 	}
 }//end of LineToGate
 
-char *extractParenthesis(char *line) {
-	char *start = strchr(line, '(');
-	char *end = strchr(line, ')');
+char* extractParenthesis(char* line) {
+	char* start = strchr(line, '(');
+	char* end = strchr(line, ')');
 
 	if (start != NULL && end != NULL && end > start) {
 		size_t length = end - start - 1;
-		char *result = (char *)malloc(length + 1);
+		char* result = (char*)malloc(length + 1);
 		if (result != NULL) {
 			strncpy(result, start + 1, length);
 			result[length] = '\0';
@@ -88,16 +89,16 @@ char *extractParenthesis(char *line) {
 	return NULL;
 }//end of ExtractParenthesis
 
-char *extractName(char *line) {
-	char *start = strchr(line, '=');
-	char *end = strchr(line, '(');
+char* extractName(char* line) {
+	char* start = strchr(line, '=');
+	char* end = strchr(line, '(');
 
 	if (start != NULL && end != NULL && end > start) {
 		start++; // Move past the '=' character
 		while (*start == ' ') start++; // Trim leading whitespaces
 
 		size_t length = end - start;
-		char *result = (char *)malloc(length + 1);
+		char* result = (char*)malloc(length + 1);
 		if (result != NULL) {
 			strncpy(result, start, length);
 			result[length] = '\0';
@@ -108,12 +109,12 @@ char *extractName(char *line) {
 	return NULL;
 }//end of ExtractName
 
-int extractFout(char *line) {
-	char *start = line;
-	char *end = strchr(line, ' ');
+int extractFout(char* line) {
+	char* start = line;
+	char* end = strchr(line, ' ');
 
 	size_t length = end - start;
-	char *result = (char *)malloc(length + 1);
+	char* result = (char*)malloc(length + 1);
 	if (result != NULL) {
 		strncpy(result, line, length);
 		result[length] = '\0';
