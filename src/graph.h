@@ -87,6 +87,7 @@ void FreeList(LIST **);
 int ReadIsc(FILE *,NODE *);
 void InitializeCircuit(NODE *, int);
 int AssignType(char *);
+char *invertType(int);
 void PrintCircuit(NODE *,int);
 void ClearCircuit(NODE *,int);
 /***************************************************************************************************************************
@@ -102,4 +103,5 @@ void LineToGate(char *, NODE *, int *, int *);
 char *extractParenthesis(char *);
 char *extractName(char *);
 int extractFout(char *);
+void writeBench(NODE*, FILE*, int);
 /****************************************************************************************************************************/
