@@ -80,3 +80,8 @@ xcuserdata/
 .idea/
 .vscode/
 src/project
+
+# user defined
+*.bench
+*.vec
+*.isc

@@ -149,22 +149,57 @@ int AssignType(char* Type) {
 	else 																	return 0;
 }//end of AssignTypee
 /****************************************************************************************************************************
+Convert (int) Typee read to (char *)     
+****************************************************************************************************************************/
+char *invertType(int type) {
+	switch (type) {
+		case 1: return "INPT";
+		case 2: return "AND";
+		case 3: return "NAND";
+		case 4: return "OR";
+		case 5: return "NOR";
+		case 6: return "XOR";
+		case 7: return "XNOR";
+		case 8: return "BUFF";
+		case 9: return "NOT";
+		case 10: return "FROM";
+		default: return "UNKNOWN";
+	}
+}//end of AssignTypee
+/****************************************************************************************************************************
+Convert (int) Typee read to (char *)     
+****************************************************************************************************************************/
+char *invertType(int type) {
+	switch (type) {
+		case 1: return "INPT";
+		case 2: return "AND";
+		case 3: return "NAND";
+		case 4: return "OR";
+		case 5: return "NOR";
+		case 6: return "XOR";
+		case 7: return "XNOR";
+		case 8: return "BUFF";
+		case 9: return "NOT";
+		case 10: return "FROM";
+		default: return "UNKNOWN";
+	}
+}//end of AssignTypee
+/****************************************************************************************************************************
 Print all members of graph structure(except Type=0) after reading the bench file
 *****************************************************************************************************************************/
-void PrintCircuit(NODE* graph, int Max) {
-	LIST* temp;
-	int  i;
-	printf("\nID\tNAME\tTypeE\tPO\tIN#\tOUT#\tCVAL\tFVAL\tMarkK\tFANIN\tFANOUT\n");
-	for (i = 0;i <= Max;i++) {
-		if (graph[i].Type != 0) {
-			printf("%d\t%s\t%d\t%d\t%d\t%d\t", i, graph[i].Name, graph[i].Type, graph[i].Po, graph[i].Nfi, graph[i].Nfo);
-			printf("%d\t%d\t%d\t", graph[i].Cval, graph[i].Fval, graph[i].Mark);
-			temp = NULL;  temp = graph[i].Fin;   if (temp != NULL) { PrintList(temp); } printf("\t");
-			temp = NULL;  temp = graph[i].Fot;   if (temp != NULL) { PrintList(temp); }
-			printf("\n");
-		}
-	}
-	return;
+void PrintCircuit(NODE *graph,int Max)
+{
+LIST *temp;
+int  i;
+printf("\nID\tNAME\tTypeE\tPO\tIN#\tOUT#\tCVAL\tFVAL\tMarkK\tFANIN\tFANOUT\n");
+for(i=0;i<=Max;i++){
+  if(graph[i].Type!=0){
+    printf("%d\t%s\t%d\t%d\t%d\t%d\t",i,graph[i].Name,graph[i].Type,graph[i].Po,graph[i].Nfi,graph[i].Nfo);
+    printf("%d\t%d\t%d\t",graph[i].Cval,graph[i].Fval,graph[i].Mark);
+    temp=NULL;  temp=graph[i].Fin;   if(temp!=NULL){  PrintList(temp); } printf("\t");
+    temp=NULL;  temp=graph[i].Fot;   if(temp!=NULL){  PrintList(temp); }
+    printf("\n"); } }
+return;
 }//end of PrintCircuit
 /****************************************************************************************************************************
 Free the memory of all member of graph structure

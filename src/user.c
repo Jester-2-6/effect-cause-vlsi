@@ -43,7 +43,7 @@ void LineToGate(char* line, NODE* Node, int* node_id_ptr, int* tot) {
 	} else if (line[0] == 'O') {
 		// Handle outputs
 		nid_tmp = atoi(extractParenthesis(line));
-		Node[nid_tmp].Type = OUTPUT;
+		Node[nid_tmp].Po = 1;
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
 	} else {
@@ -125,3 +125,46 @@ int extractFout(char* line) {
 
 	return -1; // Return an error code if allocation fails
 }//end of ExtractFout
+
+void writeBench(NODE* graph, FILE* bench, int max) {
+	fprintf(bench, "#\n#\n#\n\n");
+
+	// Write the primary inputs
+	for (int i = 0; i <= max; i++) {
+		if (graph[i].Type == INPT) {
+			fprintf(bench, "INPUT(%d)\n", i);
+		}
+	}
+
+	fprintf(bench, "\n");
+
+	// Write the primary outputs
+	for (int i = 0; i <= max; i++) {
+		if (graph[i].Po == 1) {
+			fprintf(bench, "OUTPUT(%d)\n", i);
+		}
+	}
+
+	fprintf(bench, "\n");
+
+	// Write the gates
+	char *gate_type;
+	for (int i = 0; i <= max; i++) {
+		if (graph[i].Type > 1) {
+			gate_type = invertType(graph[i].Type);
+
+			fprintf(bench, "%d = %s(", i, gate_type);
+
+			LIST *fin = graph[i].Fin;
+			while (fin != NULL) {
+				fprintf(bench, "%d", fin->id);
+				fin = fin->next;
+				if (fin != NULL) {
+					fprintf(bench, ",");
+				}
+			}
+
+			fprintf(bench, ")\n");
+		}
+	}
+}
