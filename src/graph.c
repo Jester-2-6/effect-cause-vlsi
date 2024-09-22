@@ -142,10 +142,27 @@ int AssignType(char *Type) {
 	else                          			                   return 0;
 }//end of AssignTypee
 /****************************************************************************************************************************
+Convert (int) Typee read to (char *)     
+****************************************************************************************************************************/
+char *invertType(int type) {
+	switch (type) {
+		case 1: return "INPT";
+		case 2: return "AND";
+		case 3: return "NAND";
+		case 4: return "OR";
+		case 5: return "NOR";
+		case 6: return "XOR";
+		case 7: return "XNOR";
+		case 8: return "BUFF";
+		case 9: return "NOT";
+		case 10: return "FROM";
+		default: return "UNKNOWN";
+	}
+}//end of AssignTypee
+/****************************************************************************************************************************
 Print all members of graph structure(except Type=0) after reading the bench file
 *****************************************************************************************************************************/
-void PrintCircuit(NODE *graph,int Max)
-{
+void PrintCircuit(NODE *graph,int Max) {
 LIST *temp;
 int  i;
 printf("\nID\tNAME\tTypeE\tPO\tIN#\tOUT#\tCVAL\tFVAL\tMarkK\tFANIN\tFANOUT\n");

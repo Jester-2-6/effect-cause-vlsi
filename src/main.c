@@ -27,6 +27,10 @@ Max = readBench(graph, fisc);                //read .isc file and return index o
 fclose(fisc);                            //close file pointer for .isc file
 PrintCircuit(graph, Max);                 //print all members of graph structure
 
+FILE *fbenchOut;
+fbenchOut = fopen(argv[2], "w");                           //file pointer to open .bench file
+writeBench(graph, fbenchOut, Max);                //read .isc file and return index of last node in graph formed
+
 //Read the .vec file and store the information in  vector structure
 
 
