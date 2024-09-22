@@ -5,7 +5,7 @@
 void main(int argc, char** argv)
 {
     FILE* fisc, * fvec, * ffau, * fres;             //file pointers used for .isc file, .vec file, .faults file and resultfile
-    int Max, Opt, Npi, Npo, Total, Tfs;              //maxnode id,option,tot no of PIs,tot no of Pos,Tot no of input patterns& faults in.vec in.faults
+    int Max, Opt, Npi, Npo, Total, Tfs, orig_max;              //maxnode id,option,tot no of PIs,tot no of Pos,Tot no of input patterns& faults in.vec in.faults
 
     NODE graph[Mnod], new_graph[Mnod];                         //structure used to store the ckt information in .isc file 
     //PATTERN vector[Mpt];                      //structure used to store the input vectors information in .vec file 
@@ -23,16 +23,14 @@ void main(int argc, char** argv)
 
     // Read the .bench file and store the information in graph structure
     fisc = fopen(argv[1], "r");                           //file pointer to open .bench file
-    Max = readBench(graph, fisc);                //read .isc file and return index of last node in graph formed
+    orig_max = readBench(graph, fisc);                //read .isc file and return index of last node in graph formed
     fclose(fisc);                            //close file pointer for .isc file
 
-    PrintCircuit(graph, Max);                 //print all members of graph structure
+    PrintCircuit(graph, orig_max);                 //print all members of graph structure
 
-    Max = duplicateCircuit(graph, new_graph, Max);
-    FILE* fbenchOut;
-    fbenchOut = fopen(argv[2], "w");                           //file pointer to open .bench file
+    Max = duplicateCircuit(graph, new_graph, orig_max);
     PrintCircuit(new_graph, Max);                 //print all members of graph structure
-    writeBench(new_graph, fbenchOut, Max);                //read .isc file and return index of last node in graph formed
+    writeAllErrors(new_graph, Max, orig_max, argv[2]);
 
     //Read the .vec file and store the information in  vector structure
 

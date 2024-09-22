@@ -101,4 +101,6 @@ char* extractParenthesis(char*);
 char* extractName(char*);
 int extractFout(char*);
 void writeBench(NODE*, FILE*, int);
+void injectError(NODE*, int, int, int);
+void writeAllErrors(NODE*, int, int, char[]);
 /****************************************************************************************************************************/
