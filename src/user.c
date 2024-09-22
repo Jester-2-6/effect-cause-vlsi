@@ -308,3 +308,52 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 		}
 	}
 }
+
+void injectError(NODE* graph, int node_id, int error, int tot) {
+	int error_node_id = mapNewtoOld(graph, node_id, tot, 1);
+	graph[error_node_id].Type = error;
+}
+
+void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
+	int i, orig_type, fi_count;
+	char filename[256];
+	FILE* fbenchOut;
+
+	for (int i = 0; i <= error_limit; i++) {
+		if (graph[i].Type > INPT && mapNewtoOld(graph, i, tot, 0) > 0) {
+			// mapnewtoold returns -1 if the node is not in the original circuit
+			orig_type = graph[i].Type;
+			fi_count = graph[i].Nfi;
+
+			if (fi_count == 1) {
+				for (int j = BUFF; j <= NOT; j++) {
+					if (orig_type != j) {
+						sprintf(filename, "%s_%d_to_%s.bench", prefix, i, invertType(j));
+						fbenchOut = fopen(filename, "w");
+
+						injectError(graph, i, j, tot);
+						writeBench(graph, fbenchOut, tot);
+						injectError(graph, i, orig_type, tot);
+
+						fclose(fbenchOut);
+					}
+
+				}
+			} else if (fi_count >= 2) {
+				for (int j = AND; j <= XNOR; j++) {
+					if (orig_type != j) {
+						sprintf(filename, "%s_%d_to_%s.bench", prefix, i, invertType(j));
+						fbenchOut = fopen(filename, "w");
+
+						injectError(graph, i, j, tot);
+						writeBench(graph, fbenchOut, tot);
+						injectError(graph, i, orig_type, tot);
+
+						fclose(fbenchOut);
+					}
+
+				}
+			}
+		}
+	}
+}
