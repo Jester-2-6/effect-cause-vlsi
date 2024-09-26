@@ -85,3 +85,4 @@ src/project
 *.bench
 *.vec
 *.isc
+*.fault

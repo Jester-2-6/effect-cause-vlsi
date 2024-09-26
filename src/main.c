@@ -12,6 +12,7 @@ void main(int argc, char** argv)
 
     //FAULT stuck[Mft];                      //structure used to store the faults information in .faults file
     int a, b, c, d;                             //random variables
+    char filename[Mfnam];                     //filename used to store the name of the file
 
 
     //Read the .isc file and store the information in graph structure
@@ -22,7 +23,8 @@ void main(int argc, char** argv)
     // PrintCircuit(graph,Max);                 //print all members of graph structure
 
     // Read the .bench file and store the information in graph structure
-    fisc = fopen(argv[1], "r");                           //file pointer to open .bench file
+    sprintf(filename, "../bench/%s.bench", argv[1]);
+    fisc = fopen(filename, "r");                           //file pointer to open .bench file
     orig_max = readBench(graph, fisc);                //read .isc file and return index of last node in graph formed
     fclose(fisc);                            //close file pointer for .isc file
 
@@ -30,7 +32,13 @@ void main(int argc, char** argv)
 
     Max = duplicateCircuit(graph, new_graph, orig_max);
     PrintCircuit(new_graph, Max);                 //print all members of graph structure
-    writeAllErrors(new_graph, Max, orig_max, argv[2]);
+
+    sprintf(filename, "../out/%s.fault", argv[1]);
+    writeFaultFile(Max, filename);
+
+    sprintf(filename, "../out/%s", argv[1]);
+    writeAllErrors(new_graph, Max, orig_max, filename);
+    runATALANTABatch(filename);
 
     //Read the .vec file and store the information in  vector structure
 
