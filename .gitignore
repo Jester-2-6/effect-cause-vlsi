@@ -88,3 +88,4 @@ src/project
 *.isc
 *.fault
 *.test
+*.pattern
