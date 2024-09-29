@@ -83,6 +83,7 @@ src/project
 
 # user defined
 *.bench
+!bench/*.bench
 *.vec
 *.isc
 *.fault

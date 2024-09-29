@@ -41,6 +41,7 @@ Constant Declarations
 // User Defined Constants
 #define TokLen      10       // max length of token
 #define IscLineLen  100			// max length of bench file line
+#define MAX_PATTERNS 100
 /***************************************************************************************************************************
 Structure Declarations
 ****************************************************************************************************************************/
@@ -94,16 +95,16 @@ User Defined Functions in user.c
 int duplicateCircuit(NODE*, NODE*, int);
 void copyNode(NODE*, NODE*, int);
 int insertComparator(NODE*, int);
-int mapNewtoOld(NODE*, int, int, int);
+int mapOldtoNew(NODE*, int, int, int);
 int readBench(NODE*, FILE*);
 void LineToGate(char*, NODE*, int*, int*);
 char* extractParenthesis(char*);
 char* extractName(char*);
 int extractFout(char*);
 void writeBench(NODE*, FILE*, int);
-void injectError(NODE*, int, int, int);
 void writeAllErrors(NODE*, int, int, char[]);
-void runATALANTA(char [], char [], char []);
-void writeFaultFile(int, char []);
-void runATALANTABatch(char []);
+void runATALANTA(char[], char[], char[]);
+void writeFaultFile(int, char[]);
+void runATALANTABatch(char[]);
+void writePatterns(char[], int, int, char[]);
 /****************************************************************************************************************************/
