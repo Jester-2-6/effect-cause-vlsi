@@ -15,7 +15,7 @@ Header Files
 Constant Declarations
 ****************************************************************************************************************************/
 // VARIOUS CONSTANTS
-#define Mfnam      20			// max size for a file name
+#define Mfnam     200			// max size for a file name
 #define Mnod    15000 		        // max number of nodes in a graph/node
 #define Mlin      200			// max size of characters in a line
 #define Mnam       25			// max size of a node name
@@ -103,4 +103,7 @@ int extractFout(char*);
 void writeBench(NODE*, FILE*, int);
 void injectError(NODE*, int, int, int);
 void writeAllErrors(NODE*, int, int, char[]);
+void runATALANTA(char [], char [], char []);
+void writeFaultFile(int, char []);
+void runATALANTABatch(char []);
 /****************************************************************************************************************************/

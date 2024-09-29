@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <dirent.h>
 
 int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 	int node_pointer_old, node_pointer_new, new_1, new_2;
@@ -316,8 +317,11 @@ void injectError(NODE* graph, int node_id, int error, int tot) {
 
 void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 	int i, orig_type, fi_count;
-	char filename[256];
+	char filename[Mfnam];
 	FILE* fbenchOut;
+
+	sprintf(filename, "mkdir %s", prefix);
+	system(filename);
 
 	for (int i = 0; i <= error_limit; i++) {
 		if (graph[i].Type > INPT && mapNewtoOld(graph, i, tot, 0) > 0) {
@@ -328,8 +332,8 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 			if (fi_count == 1) {
 				for (int j = BUFF; j <= NOT; j++) {
 					if (orig_type != j) {
-						sprintf(filename, "%s_%d_to_%s.bench", prefix, i, invertType(j));
-						fbenchOut = fopen(filename, "w");
+						sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));\
+							fbenchOut = fopen(filename, "w");
 
 						injectError(graph, i, j, tot);
 						writeBench(graph, fbenchOut, tot);
@@ -341,11 +345,15 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 				}
 			} else if (fi_count >= 2) {
 				for (int j = AND; j <= XNOR; j++) {
+					// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
+					if ((j == XOR || j == XNOR) && fi_count > 2) {
+						continue;
+					}
 					if (orig_type != j) {
-						sprintf(filename, "%s_%d_to_%s.bench", prefix, i, invertType(j));
-						fbenchOut = fopen(filename, "w");
+						sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));
+						fbenchOut = fopen(filename, "w");\
 
-						injectError(graph, i, j, tot);
+							injectError(graph, i, j, tot);
 						writeBench(graph, fbenchOut, tot);
 						injectError(graph, i, orig_type, tot);
 
@@ -355,5 +363,45 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 				}
 			}
 		}
+	}
+}
+
+void runATALANTA(char bench[], char error[], char result[]) {
+	char command[256];
+	sprintf(command, "/home/codespace/cad/Atalanta/atalanta -A -f %s -t %s %s", error, result, bench);
+	printf("%s\n", command);
+	system(command);
+}
+
+void writeFaultFile(int end_node_id, char filename[]) {
+	FILE* faultOut;
+	faultOut = fopen(filename, "w");
+
+	fprintf(faultOut, "%d /0\n", end_node_id);
+
+	fclose(faultOut);
+}
+
+void runATALANTABatch(char prefix[]) {
+	DIR* dir;
+	struct dirent* entry;
+	char bench_file[2 * Mfnam];
+	char error_file[2 * Mfnam];
+	char result_file[2 * Mfnam];
+
+	sprintf(error_file, "%s.fault", prefix);
+
+	if ((dir = opendir(prefix)) != NULL) {
+		while ((entry = readdir(dir)) != NULL) {
+			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+				continue;
+			}
+			sprintf(bench_file, "%s/%s", prefix, entry->d_name);
+			sprintf(result_file, "%s/%s.test", prefix, entry->d_name);
+			runATALANTA(bench_file, error_file, result_file);
+		}
+		closedir(dir);
+	} else {
+		perror("Could not open directory");
 	}
 }
