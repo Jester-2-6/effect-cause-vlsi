@@ -86,3 +86,4 @@ src/project
 *.vec
 *.isc
 *.fault
+*.test

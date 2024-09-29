@@ -103,7 +103,7 @@ int extractFout(char*);
 void writeBench(NODE*, FILE*, int);
 void injectError(NODE*, int, int, int);
 void writeAllErrors(NODE*, int, int, char[]);
-void runATALANTA(char [], char []);
+void runATALANTA(char [], char [], char []);
 void writeFaultFile(int, char []);
 void runATALANTABatch(char []);
 /****************************************************************************************************************************/

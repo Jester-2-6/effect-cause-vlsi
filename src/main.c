@@ -14,7 +14,6 @@ void main(int argc, char** argv)
     int a, b, c, d;                             //random variables
     char filename[Mfnam];                     //filename used to store the name of the file
 
-
     //Read the .isc file and store the information in graph structure
     // fisc=fopen(argv[1],"r");                           //file pointer to open .isc file 
     // Max=0; 
