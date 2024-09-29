@@ -22,6 +22,7 @@ jobs:
           cd Atalanta
           make
           cd ..
+          mkdir /home/codespace
           mv Atalanta/ /home/codespace/Atalanta
       - name: run project
         run: |
