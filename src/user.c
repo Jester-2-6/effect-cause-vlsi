@@ -33,8 +33,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 
 			while (fot != NULL) {
 				if (graph[fot->id].Type > INPT) {
-					InsertList(&new_graph[i].Fot, mapNewtoOld(new_graph, fot->id, node_pointer_new, 0));
-					InsertList(&new_graph[i].Fot, mapNewtoOld(new_graph, fot->id, node_pointer_new, 1));
+					InsertList(&new_graph[i].Fot, mapOldtoNew(new_graph, fot->id, node_pointer_new, 0));
+					InsertList(&new_graph[i].Fot, mapOldtoNew(new_graph, fot->id, node_pointer_new, 1));
 				}
 
 				new_graph[i].Nfo++;
@@ -43,8 +43,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 			}
 
 		} else if (graph[i].Type > INPT) {
-			new_1 = mapNewtoOld(new_graph, i, node_pointer_new, 0);
-			new_2 = mapNewtoOld(new_graph, i, node_pointer_new, 1);
+			new_1 = mapOldtoNew(new_graph, i, node_pointer_new, 0);
+			new_2 = mapOldtoNew(new_graph, i, node_pointer_new, 1);
 
 			fin = graph[i].Fin;
 
@@ -53,8 +53,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 					InsertList(&new_graph[new_1].Fin, fin->id);
 					InsertList(&new_graph[new_2].Fin, fin->id);
 				} else if (graph[fin->id].Type > INPT) {
-					InsertList(&new_graph[new_1].Fin, mapNewtoOld(new_graph, fin->id, node_pointer_new, 0));
-					InsertList(&new_graph[new_2].Fin, mapNewtoOld(new_graph, fin->id, node_pointer_new, 1));
+					InsertList(&new_graph[new_1].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 0));
+					InsertList(&new_graph[new_2].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 1));
 				}
 
 				fin = fin->next;
@@ -64,8 +64,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 
 			while (fot != NULL) {
 				if (graph[fot->id].Type > INPT) {
-					InsertList(&new_graph[new_1].Fot, mapNewtoOld(new_graph, fot->id, node_pointer_new, 0));
-					InsertList(&new_graph[new_2].Fot, mapNewtoOld(new_graph, fot->id, node_pointer_new, 1));
+					InsertList(&new_graph[new_1].Fot, mapOldtoNew(new_graph, fot->id, node_pointer_new, 0));
+					InsertList(&new_graph[new_2].Fot, mapOldtoNew(new_graph, fot->id, node_pointer_new, 1));
 				}
 
 				fot = fot->next;
@@ -123,9 +123,9 @@ int insertComparator(NODE* graph, int tot) {
 	return new_node_pointer;
 }
 
-int mapNewtoOld(NODE* graph, int new_id, int limit, int skip) {
+int mapOldtoNew(NODE* graph, int old_id, int limit, int skip) {
 	for (int i = 0; i <= limit; i++) {
-		if (graph[i].Mark == new_id) {
+		if (graph[i].Mark == old_id) {
 			if (skip > 0) {
 				skip--;
 			} else {
@@ -310,13 +310,8 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 	}
 }
 
-void injectError(NODE* graph, int node_id, int error, int tot) {
-	int error_node_id = mapNewtoOld(graph, node_id, tot, 1);
-	graph[error_node_id].Type = error;
-}
-
 void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
-	int i, orig_type, fi_count;
+	int i, new_index, orig_type, fi_count;
 	char filename[Mfnam];
 	FILE* fbenchOut;
 
@@ -324,43 +319,47 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 	system(filename);
 
 	for (int i = 0; i <= error_limit; i++) {
-		if (graph[i].Type > INPT && mapNewtoOld(graph, i, tot, 0) > 0) {
-			// mapnewtoold returns -1 if the node is not in the original circuit
-			orig_type = graph[i].Type;
-			fi_count = graph[i].Nfi;
+		new_index = mapOldtoNew(graph, i, tot, 1);
 
-			if (fi_count == 1) {
-				for (int j = BUFF; j <= NOT; j++) {
-					if (orig_type != j) {
-						sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));\
-							fbenchOut = fopen(filename, "w");
+		if (new_index == -1 || graph[i].Type <= INPT) {
+			continue;
+		}
 
-						injectError(graph, i, j, tot);
-						writeBench(graph, fbenchOut, tot);
-						injectError(graph, i, orig_type, tot);
+		// mapnewtoold returns -1 if the node is not in the original circuit
+		orig_type = graph[new_index].Type;
+		fi_count = graph[new_index].Nfi;
 
-						fclose(fbenchOut);
-					}
+		if (fi_count == 1) {
+			for (int j = BUFF; j <= NOT; j++) {
+				if (orig_type != j) {
+					sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));
+					fbenchOut = fopen(filename, "w");
 
+					graph[new_index].Type = j;
+					writeBench(graph, fbenchOut, tot);
+					graph[new_index].Type = orig_type;
+
+					fclose(fbenchOut);
 				}
-			} else if (fi_count >= 2) {
-				for (int j = AND; j <= XNOR; j++) {
-					// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
-					if ((j == XOR || j == XNOR) && fi_count > 2) {
-						continue;
-					}
-					if (orig_type != j) {
-						sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));
-						fbenchOut = fopen(filename, "w");\
 
-							injectError(graph, i, j, tot);
-						writeBench(graph, fbenchOut, tot);
-						injectError(graph, i, orig_type, tot);
-
-						fclose(fbenchOut);
-					}
-
+			}
+		} else if (fi_count >= 2) {
+			for (int j = AND; j <= XNOR; j++) {
+				// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
+				if ((j == XOR || j == XNOR) && fi_count != 2) {
+					continue;
 				}
+				if (orig_type != j) {
+					sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));
+					fbenchOut = fopen(filename, "w");
+
+					graph[new_index].Type = j;
+					writeBench(graph, fbenchOut, tot);
+					graph[new_index].Type = orig_type;
+
+					fclose(fbenchOut);
+				}
+
 			}
 		}
 	}
@@ -378,7 +377,6 @@ void writeFaultFile(int end_node_id, char filename[]) {
 	faultOut = fopen(filename, "w");
 
 	fprintf(faultOut, "%d /0\n", end_node_id);
-
 	fclose(faultOut);
 }
 
@@ -393,15 +391,96 @@ void runATALANTABatch(char prefix[]) {
 
 	if ((dir = opendir(prefix)) != NULL) {
 		while ((entry = readdir(dir)) != NULL) {
-			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+			// Skip if the file extension is not .bench
+			if (strstr(entry->d_name, ".bench") == NULL || strstr(entry->d_name, ".test") != NULL) {
 				continue;
 			}
+
 			sprintf(bench_file, "%s/%s", prefix, entry->d_name);
 			sprintf(result_file, "%s/%s.test", prefix, entry->d_name);
 			runATALANTA(bench_file, error_file, result_file);
 		}
 		closedir(dir);
+	}
+}
+
+void select_random_patterns(const char* filename, int patterns_per_fault, FILE* outfile) {
+	char line[256];
+	char patterns[MAX_PATTERNS][256];
+	int pattern_count = 0;
+	char* colon_pos = strchr(line, ':');
+	int selected[MAX_PATTERNS] = { 0 };
+	FILE* file;
+
+	file = fopen(filename, "r");
+	if (!file) {
+		perror("Failed to open file");
+		return;
+	}
+
+	// Read the file and extract patterns
+	while (fgets(line, sizeof(line), file)) {
+		if (strstr(line, ":") && strstr(line, "x")) {
+			colon_pos = strchr(line, ':');
+			strcpy(patterns[pattern_count++], colon_pos + 2);
+		}
+	}
+	fclose(file);
+
+	// Randomly select patterns_per_fault number of patterns
+	srand(time(NULL));
+
+	if (pattern_count <= patterns_per_fault) {
+		// Print all available patterns if they are less than or equal to patterns_per_fault
+		for (int i = 0; i < pattern_count; i++) {
+			fprintf(outfile, "%s", patterns[i]);
+		}
 	} else {
-		perror("Could not open directory");
+		// Randomly select patterns_per_fault number of patterns without repetition
+		for (int i = 0; i < patterns_per_fault; i++) {
+			int index;
+			do {
+				index = rand() % pattern_count;
+			} while (selected[index]); // Repeat until an unselected pattern is found
+
+			selected[index] = 1; // Mark the pattern as selected
+			fprintf(outfile, "%s", patterns[index]);
+		}
+	}
+	fprintf(outfile, "\n");
+}
+
+void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, char outfile[]) {
+	DIR* dir;
+	struct dirent* entry;
+	char* test_files[fault_count];
+	int file_count = 0;
+
+	if ((dir = opendir(path_prefix)) != NULL) {
+		while ((entry = readdir(dir)) != NULL && file_count < fault_count) {
+			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+				continue;
+			}
+			if (strstr(entry->d_name, ".test")) {
+				test_files[file_count] = malloc(strlen(path_prefix) + strlen(entry->d_name) + 2);
+				sprintf(test_files[file_count], "%s%s", path_prefix, entry->d_name);
+				file_count++;
+			}
+		}
+		closedir(dir);
+	}
+
+	srand(time(NULL));
+	FILE* outfile_ptr = fopen(outfile, "w");
+
+	for (int i = 0; i < file_count; i++) {
+		select_random_patterns(test_files[i], patterns_per_fault, outfile_ptr);
+	}
+
+	fclose(outfile_ptr);
+
+	// Free allocated memory
+	for (int i = 0; i < file_count; i++) {
+		free(test_files[i]);
 	}
 }
