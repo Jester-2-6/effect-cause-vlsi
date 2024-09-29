@@ -16,6 +16,13 @@ jobs:
         run: |
           cd src
           make
+      - name: setup atalanta
+        run: |
+          git clone https://github.com/hsluoyz/Atalanta.git
+          cd Atalanta
+          make
+          cd ..
+          mv Atalanta/ /home/codespace/Atalanta
       - name: run project
         run: |
           cd src

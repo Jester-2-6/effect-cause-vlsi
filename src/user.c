@@ -368,7 +368,7 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 
 void runATALANTA(char bench[], char error[], char result[]) {
 	char command[256];
-	sprintf(command, "/home/codespace/cad/Atalanta/atalanta -A -f %s -t %s %s", error, result, bench);
+	sprintf(command, "/home/codespace/Atalanta/atalanta -A -f %s -t %s %s", error, result, bench);
 	printf("%s\n", command);
 	system(command);
 }
