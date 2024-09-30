@@ -18,7 +18,7 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 		if (graph[node_pointer_old].Type == 0) {
 			continue;
 		} else if (graph[node_pointer_old].Type == INPT) {
-			new_graph[node_pointer_old].Type = INPT;
+			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
 		} else {
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
 			node_pointer_new++;
@@ -185,6 +185,7 @@ void LineToGate(char* line, NODE* Node, int* node_id_ptr, int* tot) {
 		// Handle outputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Po = 1;
+		Node[nid_tmp].Type = INPT; // To handle direct outputs
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
 	} else {
