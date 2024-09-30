@@ -90,19 +90,26 @@ int insertComparator(NODE* graph, int tot) {
 		if (graph[i].Po > 0) {
 			// No need to initialize since we initialized MNod nodes in the previous function
 			InsertList(&graph[new_node_pointer].Fin, i);
-			InsertList(&graph[new_node_pointer].Fin, i + 1);
 			InsertList(&graph[i].Fot, new_node_pointer);
-			InsertList(&graph[i + 1].Fot, new_node_pointer);
+			graph[i].Po = 0;
+			graph[i].Nfo++;
+
+			if (graph[i].Type > INPT) {
+				InsertList(&graph[new_node_pointer].Fin, i + 1);
+				InsertList(&graph[i + 1].Fot, new_node_pointer);
+				graph[i + 1].Po = 0;
+				graph[i + 1].Nfo++;
+
+				graph[new_node_pointer].Nfi = 2;
+			} else {
+				graph[new_node_pointer].Nfi = 1;
+			}
+
 			InsertList(&or_fin, new_node_pointer);
 
 			graph[new_node_pointer].Type = XOR;
-			graph[new_node_pointer].Nfi = 2;
 			graph[new_node_pointer].Nfo = 1;
 
-			graph[i].Po = 0;
-			graph[i].Nfo++;
-			graph[i + 1].Po = 0;
-			graph[i + 1].Nfo++;
 
 			new_node_pointer++;
 			i += 2;
@@ -309,6 +316,11 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 				if (fin != NULL) {
 					fprintf(bench, ",");
 				}
+			}
+
+			// for 1 input XOR and XNOR gates, add a comma and repeat the first input
+			if ((graph[i].Type == XOR || graph[i].Type == XNOR) && graph[i].Nfi == 1) {
+				fprintf(bench, ",%d", graph[i].Fin->id);
 			}
 
 			fprintf(bench, ")\n");
