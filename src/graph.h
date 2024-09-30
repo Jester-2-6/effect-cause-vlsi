@@ -107,4 +107,5 @@ void runATALANTA(char[], char[], char[]);
 void writeFaultFile(int, char[]);
 void runATALANTABatch(char[]);
 void writePatterns(char[], int, int, char[]);
+int ifPatternsExist(char*);
 /****************************************************************************************************************************/

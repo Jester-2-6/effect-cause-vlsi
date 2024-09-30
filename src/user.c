@@ -367,7 +367,7 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 
 void runATALANTA(char bench[], char error[], char result[]) {
 	char command[256];
-	sprintf(command, "/home/codespace/Atalanta/atalanta -A -f %s -t %s %s", error, result, bench);
+	sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
 	printf("%s\n", command);
 	system(command);
 }
@@ -413,10 +413,6 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 	FILE* file;
 
 	file = fopen(filename, "r");
-	if (!file) {
-		perror("Failed to open file");
-		return;
-	}
 
 	// Read the file and extract patterns
 	while (fgets(line, sizeof(line), file)) {
@@ -454,6 +450,7 @@ void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, 
 	DIR* dir;
 	struct dirent* entry;
 	char* test_files[fault_count];
+	char fname[256];
 	int file_count = 0;
 
 	if ((dir = opendir(path_prefix)) != NULL) {
@@ -462,6 +459,8 @@ void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, 
 				continue;
 			}
 			if (strstr(entry->d_name, ".test")) {
+				sprintf(fname, "%s%s", path_prefix, entry->d_name);
+				if (!ifPatternsExist(fname)) continue;
 				test_files[file_count] = malloc(strlen(path_prefix) + strlen(entry->d_name) + 2);
 				sprintf(test_files[file_count], "%s%s", path_prefix, entry->d_name);
 				file_count++;
@@ -483,4 +482,20 @@ void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, 
 	for (int i = 0; i < file_count; i++) {
 		free(test_files[i]);
 	}
+}
+
+int ifPatternsExist(char* filename) {
+	FILE* file;
+	char line[256];
+
+	file = fopen(filename, "r");
+
+	while (fgets(line, sizeof(line), file)) {
+		if (strstr(line, ":") && strstr(line, "x")) {
+			fclose(file);
+			return 1;
+		}
+	}
+	fclose(file);
+	return 0;
 }
