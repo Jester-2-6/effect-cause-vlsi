@@ -375,10 +375,10 @@ void runATALANTA(char bench[], char error[], char result[]) {
 	char command[256];
 
 	// Uncomment to run on codespace
-	sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
+	// sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
 
 	// uncomment to run in unix lab
-	// sprintf(command, "/opt/net/apps/atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
+	sprintf(command, "/opt/net/apps/atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
 
 	system(command);
 }
