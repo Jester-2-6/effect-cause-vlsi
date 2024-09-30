@@ -2,13 +2,13 @@
 #include <dirent.h>
 
 int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
-	int node_pointer_old, node_pointer_new, new_1, new_2;
+	int node_pointer_old, node_pointer_new, new_1, new_2, i;
 	LIST* fin;
 	LIST* fot;
 
 	node_pointer_new = 0;
 
-	for (int i = 0; i < Mnod; i++) {
+	for (i = 0; i < Mnod; i++) {
 		InitializeCircuit(new_graph, i);
 	}
 
@@ -27,7 +27,7 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 		}
 	}
 
-	for (int i = 0; i <= tot; i++) {
+	for (i = 0; i <= tot; i++) {
 		if (graph[i].Type == INPT) {
 			fot = graph[i].Fot;
 
@@ -79,11 +79,12 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 }
 
 int insertComparator(NODE* graph, int tot) {
-	int i = 0;
+	int i;
 	int new_node_pointer = tot + 1;
 	LIST* or_fin;
 
 	or_fin = NULL;
+	i = 0;
 
 	while (i <= tot) {
 		if (graph[i].Po > 0) {
@@ -124,7 +125,9 @@ int insertComparator(NODE* graph, int tot) {
 }
 
 int mapOldtoNew(NODE* graph, int old_id, int limit, int skip) {
-	for (int i = 0; i <= limit; i++) {
+	int i;
+
+	for (i = 0; i <= limit; i++) {
 		if (graph[i].Mark == old_id) {
 			if (skip > 0) {
 				skip--;
@@ -269,10 +272,12 @@ int extractFout(char* line) {
 }//end of ExtractFout
 
 void writeBench(NODE* graph, FILE* bench, int max) {
+	int i;
+
 	fprintf(bench, "#\n#\n#\n\n");
 
 	// Write the primary inputs
-	for (int i = 0; i <= max; i++) {
+	for (i = 0; i <= max; i++) {
 		if (graph[i].Type == INPT) {
 			fprintf(bench, "INPUT(%d)\n", i);
 		}
@@ -281,7 +286,7 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 	fprintf(bench, "\n");
 
 	// Write the primary outputs
-	for (int i = 0; i <= max; i++) {
+	for (i = 0; i <= max; i++) {
 		if (graph[i].Po == 1) {
 			fprintf(bench, "OUTPUT(%d)\n", i);
 		}
@@ -291,7 +296,7 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 
 	// Write the gates
 	char* gate_type;
-	for (int i = 0; i <= max; i++) {
+	for (i = 0; i <= max; i++) {
 		if (graph[i].Type > 1) {
 			gate_type = invertType(graph[i].Type);
 
@@ -312,14 +317,14 @@ void writeBench(NODE* graph, FILE* bench, int max) {
 }
 
 void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
-	int i, new_index, orig_type, fi_count;
+	int i, j, new_index, orig_type, fi_count;
 	char filename[Mfnam];
 	FILE* fbenchOut;
 
 	sprintf(filename, "mkdir %s", prefix);
 	system(filename);
 
-	for (int i = 0; i <= error_limit; i++) {
+	for (i = 0; i <= error_limit; i++) {
 		new_index = mapOldtoNew(graph, i, tot, 1);
 
 		if (new_index == -1 || graph[i].Type <= INPT) {
@@ -331,7 +336,7 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 		fi_count = graph[new_index].Nfi;
 
 		if (fi_count == 1) {
-			for (int j = BUFF; j <= NOT; j++) {
+			for (j = BUFF; j <= NOT; j++) {
 				if (orig_type != j) {
 					sprintf(filename, "%s/%d_to_%s.bench", prefix, i, invertType(j));
 					fbenchOut = fopen(filename, "w");
@@ -345,7 +350,7 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 
 			}
 		} else if (fi_count >= 2) {
-			for (int j = AND; j <= XNOR; j++) {
+			for (j = AND; j <= XNOR; j++) {
 				// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
 				if ((j == XOR || j == XNOR) && fi_count != 2) {
 					continue;
@@ -368,8 +373,13 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 
 void runATALANTA(char bench[], char error[], char result[]) {
 	char command[256];
+
+	// Uncomment to run on codespace
 	sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
-	printf("%s\n", command);
+
+	// uncomment to run in unix lab
+	// sprintf(command, "/opt/net/apps/atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
+
 	system(command);
 }
 
@@ -408,12 +418,13 @@ void runATALANTABatch(char prefix[]) {
 void select_random_patterns(const char* filename, int patterns_per_fault, FILE* outfile) {
 	char line[256];
 	char patterns[MAX_PATTERNS][256];
-	int pattern_count = 0;
+	int pattern_count, i;
 	char* colon_pos = strchr(line, ':');
 	int selected[MAX_PATTERNS] = { 0 };
 	FILE* file;
 
 	file = fopen(filename, "r");
+	pattern_count = 0;
 
 	// Read the file and extract patterns
 	while (fgets(line, sizeof(line), file)) {
@@ -429,12 +440,12 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 
 	if (pattern_count <= patterns_per_fault) {
 		// Print all available patterns if they are less than or equal to patterns_per_fault
-		for (int i = 0; i < pattern_count; i++) {
+		for (i = 0; i < pattern_count; i++) {
 			fprintf(outfile, "%s", patterns[i]);
 		}
 	} else {
 		// Randomly select patterns_per_fault number of patterns without repetition
-		for (int i = 0; i < patterns_per_fault; i++) {
+		for (i = 0; i < patterns_per_fault; i++) {
 			int index;
 			do {
 				index = rand() % pattern_count;
@@ -452,7 +463,9 @@ void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, 
 	struct dirent* entry;
 	char* test_files[fault_count];
 	char fname[256];
-	int file_count = 0;
+	int file_count, i;
+
+	file_count = 0;
 
 	if ((dir = opendir(path_prefix)) != NULL) {
 		while ((entry = readdir(dir)) != NULL && file_count < fault_count) {
@@ -473,14 +486,14 @@ void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, 
 	srand(time(NULL));
 	FILE* outfile_ptr = fopen(outfile, "w");
 
-	for (int i = 0; i < file_count; i++) {
+	for (i = 0; i < file_count; i++) {
 		select_random_patterns(test_files[i], patterns_per_fault, outfile_ptr);
 	}
 
 	fclose(outfile_ptr);
 
 	// Free allocated memory
-	for (int i = 0; i < file_count; i++) {
+	for (i = 0; i < file_count; i++) {
 		free(test_files[i]);
 	}
 }
