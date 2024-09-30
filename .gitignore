@@ -35,7 +35,6 @@
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-Makefile
 
 # Code::Blocks
 *.depend
@@ -79,7 +78,7 @@ xcuserdata/
 *.directory
 .idea/
 .vscode/
-src/project
+project
 
 # user defined
 *.bench
