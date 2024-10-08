@@ -1,6 +1,9 @@
 # effect-cause-vlsi
 Input stimuli generation for effect-cause analysis to perform diagnosis
 
+## Project Board
+View the project board [here](https://talented-pen-f74.notion.site/cda3ebff01bb4e7a8b2c7296ddc31d42?v=b34cafafcace45a6b26e21411567bbf2&pvs=74)
+
 ## Compilation
 Run the following command in the project root to compile the code:
 ```bash
