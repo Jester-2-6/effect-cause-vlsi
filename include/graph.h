@@ -109,3 +109,7 @@ void runATALANTABatch(char[]);
 void writePatterns(char[], int, int, char[]);
 int ifPatternsExist(char*);
 /****************************************************************************************************************************/
+/**
+ * Simulation related functions
+ */
+char* LogicSim(NODE*, int, char*);

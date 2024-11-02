@@ -15,6 +15,8 @@ void main(int argc, char** argv)
     char filename1[Mfnam];                     //filename variable used to hold primary file name
     char filename2[Mfnam];                     //filename variable used to hold secondary file name
 
+    char* out_vec;                             //output vector
+
     //Read the .isc file and store the information in graph structure
     // fisc=fopen(argv[1],"r");                           //file pointer to open .isc file 
     // Max=0; 
@@ -36,29 +38,32 @@ void main(int argc, char** argv)
     Max = duplicateCircuit(graph, new_graph, orig_max);
     PrintCircuit(new_graph, Max);                 //print all members of graph structure
 
-    sprintf(filename1, "out/%s.bench", argv[1]);
-    fbench = fopen(filename1, "w");
-    writeBench(new_graph, fbench, Max);
+    // sprintf(filename1, "out/%s.bench", argv[1]);
+    // fbench = fopen(filename1, "w");
+    // writeBench(new_graph, fbench, Max);
 
-    sprintf(filename1, "out/%s.fault", argv[1]);
-    writeFaultFile(Max, filename1);
+    // sprintf(filename1, "out/%s.fault", argv[1]);
+    // writeFaultFile(Max, filename1);
 
-    sprintf(filename1, "out/%s", argv[1]);
-    writeAllErrors(new_graph, Max, orig_max, filename1);
-    runATALANTABatch(filename1);
+    // sprintf(filename1, "out/%s", argv[1]);
+    // writeAllErrors(new_graph, Max, orig_max, filename1);
+    // runATALANTABatch(filename1);
 
-    sprintf(filename1, "out/%s/", argv[1]);
-    sprintf(filename2, "out/%s_g1.pattern", argv[1]);
-    writePatterns(filename1, 500, 1, filename2);
+    // sprintf(filename1, "out/%s/", argv[1]);
+    // sprintf(filename2, "out/%s_g1.pattern", argv[1]);
+    // writePatterns(filename1, 500, 1, filename2);
 
-    sprintf(filename2, "out/%s_g2.pattern", argv[1]);
-    writePatterns(filename1, 500, 2, filename2);
+    // sprintf(filename2, "out/%s_g2.pattern", argv[1]);
+    // writePatterns(filename1, 500, 2, filename2);
 
-    sprintf(filename2, "out/%s_g3.pattern", argv[1]);
-    writePatterns(filename1, 500, 3, filename2);
+    // sprintf(filename2, "out/%s_g3.pattern", argv[1]);
+    // writePatterns(filename1, 500, 3, filename2);
 
-    sprintf(filename2, "out/%s_g4.pattern", argv[1]);
-    writePatterns(filename1, 500, 4, filename2);
+    // sprintf(filename2, "out/%s_g4.pattern", argv[1]);
+    // writePatterns(filename1, 500, 4, filename2);
+
+    out_vec = LogicSim(graph, orig_max, "1111x");
+    printf("Output: %s\n", out_vec);
 
     //Read the .vec file and store the information in  vector structure
 

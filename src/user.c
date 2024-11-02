@@ -1,6 +1,24 @@
 #include "graph.h"
 #include <dirent.h>
 
+int andGate[5][5] = {
+	{0, 0, 0, 0, 0},
+	{0, 1, 2, 3, 4},
+	{0, 2, 2, 2, 2},
+	{0, 3, 2, 3, 0},
+	{0, 4, 2, 0, 4}
+};
+
+int orGate[5][5] = {
+	{0, 1, 2, 3, 4},
+	{1, 1, 1, 1, 1},
+	{2, 1, 2, 2, 2},
+	{3, 1, 2, 3, 1},
+	{4, 1, 2, 1, 4}
+};
+
+int notGate[5] = { 1, 0, 2, 4, 3 };
+
 int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 	int node_pointer_old, node_pointer_new, new_1, new_2, i;
 	LIST* fin;
@@ -17,9 +35,11 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 
 		if (graph[node_pointer_old].Type == 0) {
 			continue;
-		} else if (graph[node_pointer_old].Type == INPT) {
+		}
+		else if (graph[node_pointer_old].Type == INPT) {
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
-		} else {
+		}
+		else {
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
 			node_pointer_new++;
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
@@ -42,7 +62,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 				fot = fot->next;
 			}
 
-		} else if (graph[i].Type > INPT) {
+		}
+		else if (graph[i].Type > INPT) {
 			new_1 = mapOldtoNew(new_graph, i, node_pointer_new, 0);
 			new_2 = mapOldtoNew(new_graph, i, node_pointer_new, 1);
 
@@ -52,7 +73,8 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 				if (graph[fin->id].Type == INPT) {
 					InsertList(&new_graph[new_1].Fin, fin->id);
 					InsertList(&new_graph[new_2].Fin, fin->id);
-				} else if (graph[fin->id].Type > INPT) {
+				}
+				else if (graph[fin->id].Type > INPT) {
 					InsertList(&new_graph[new_1].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 0));
 					InsertList(&new_graph[new_2].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 1));
 				}
@@ -101,7 +123,8 @@ int insertComparator(NODE* graph, int tot) {
 				graph[i + 1].Nfo++;
 
 				graph[new_node_pointer].Nfi = 2;
-			} else {
+			}
+			else {
 				graph[new_node_pointer].Nfi = 1;
 			}
 
@@ -113,7 +136,8 @@ int insertComparator(NODE* graph, int tot) {
 
 			new_node_pointer++;
 			i += 2;
-		} else {
+		}
+		else {
 			i++;
 		}
 	}
@@ -138,7 +162,8 @@ int mapOldtoNew(NODE* graph, int old_id, int limit, int skip) {
 		if (graph[i].Mark == old_id) {
 			if (skip > 0) {
 				skip--;
-			} else {
+			}
+			else {
 				return i;
 			}
 		}
@@ -185,20 +210,23 @@ void LineToGate(char* line, NODE* Node, int* node_id_ptr, int* tot) {
 	// skip comment lines
 	if (line[0] == '\n' || line[0] == '#') {
 		return;
-	} else if (line[0] == 'I') {
+	}
+	else if (line[0] == 'I') {
 		// Handle inputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Type = INPT;
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
-	} else if (line[0] == 'O') {
+	}
+	else if (line[0] == 'O') {
 		// Handle outputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Po = 1;
 		Node[nid_tmp].Type = INPT; // To handle direct outputs
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
-	} else {
+	}
+	else {
 		// Handle gates
 		int fout = extractFout(line);
 		char* name = extractName(line);
@@ -361,7 +389,8 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 				}
 
 			}
-		} else if (fi_count >= 2) {
+		}
+		else if (fi_count >= 2) {
 			for (j = AND; j <= XNOR; j++) {
 				// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
 				if ((j == XOR || j == XNOR) && fi_count != 2) {
@@ -387,10 +416,10 @@ void runATALANTA(char bench[], char error[], char result[]) {
 	char command[256];
 
 	// Uncomment to run on codespace
-	// sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
+	sprintf(command, "/home/codespace/Atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
 
 	// uncomment to run in unix lab
-	sprintf(command, "/opt/net/apps/atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
+	// sprintf(command, "/opt/net/apps/atalanta/atalanta -D %d -f %s -t %s %s", MAX_PATTERNS, error, result, bench);
 
 	system(command);
 }
@@ -441,8 +470,7 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 	// Read the file and extract patterns
 	while (fgets(line, sizeof(line), file)) {
 		if (strstr(line, ":") && strstr(line, "x")) {
-			colon_pos = strchr(line, ':');
-			strcpy(patterns[pattern_count++], colon_pos + 2);
+			sscanf(line, "%*d: %s %*d", patterns[pattern_count++]);
 		}
 	}
 	fclose(file);
@@ -453,9 +481,10 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 	if (pattern_count <= patterns_per_fault) {
 		// Print all available patterns if they are less than or equal to patterns_per_fault
 		for (i = 0; i < pattern_count; i++) {
-			fprintf(outfile, "%s", patterns[i]);
+			fprintf(outfile, "%s\n", patterns[i]);
 		}
-	} else {
+	}
+	else {
 		// Randomly select patterns_per_fault number of patterns without repetition
 		for (i = 0; i < patterns_per_fault; i++) {
 			int index;
@@ -464,10 +493,9 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 			} while (selected[index]); // Repeat until an unselected pattern is found
 
 			selected[index] = 1; // Mark the pattern as selected
-			fprintf(outfile, "%s", patterns[index]);
+			fprintf(outfile, "%s\n", patterns[index]);
 		}
 	}
-	fprintf(outfile, "\n");
 }
 
 void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, char outfile[]) {
@@ -524,4 +552,108 @@ int ifPatternsExist(char* filename) {
 	}
 	fclose(file);
 	return 0;
+}
+
+char* LogicSim(NODE* graph, int Tgat, char* pattern) {
+	int node_index = 0;
+	int pi_index = 0;
+	int po_index = 0;
+	int node_result = 0;
+
+	char* output_vector = (char*)malloc(Tgat * sizeof(char));
+
+	NODE* curent_node = NULL;
+	LIST* current_fanin = NULL;
+
+	node_index = 0;
+	pi_index = 0;
+	while (node_index <= Tgat) {
+		curent_node = &graph[node_index];
+		switch (curent_node->Type) {
+		case INPT:
+			curent_node->Cval = pattern[pi_index] - '0';
+			pi_index++;
+			break;
+
+		case FROM:
+			curent_node->Cval = graph[curent_node->Fin->id].Cval;
+			break;
+
+		case BUFF:
+			curent_node->Cval = graph[curent_node->Fin->id].Cval;
+			break;
+
+		case NOT:
+			curent_node->Cval = notGate[graph[curent_node->Fin->id].Cval];
+			break;
+
+		case AND:
+			node_result = 1;
+			current_fanin = curent_node->Fin;
+
+			while (current_fanin != NULL) {
+				node_result = andGate[node_result][graph[current_fanin->id].Cval];
+				current_fanin = current_fanin->next;
+			}
+			curent_node->Cval = node_result;
+			break;
+
+		case NAND:
+			node_result = 1;
+			current_fanin = curent_node->Fin;
+
+			while (current_fanin != NULL) {
+				node_result = andGate[node_result][graph[current_fanin->id].Cval];
+				current_fanin = current_fanin->next;
+			}
+			curent_node->Cval = notGate[node_result];
+			break;
+
+		case OR:
+			node_result = 0;
+			current_fanin = curent_node->Fin;
+
+			while (current_fanin != NULL) {
+				node_result = orGate[node_result][graph[current_fanin->id].Cval];
+				current_fanin = current_fanin->next;
+			}
+			curent_node->Cval = node_result;
+			break;
+
+		case NOR:
+			node_result = 0;
+			current_fanin = curent_node->Fin;
+
+			while (current_fanin != NULL) {
+				node_result = orGate[node_result][graph[current_fanin->id].Cval];
+				current_fanin = current_fanin->next;
+			}
+			curent_node->Cval = notGate[node_result];
+			break;
+
+		case XOR:
+			current_fanin = curent_node->Fin;
+			curent_node->Cval = graph[current_fanin->id].Cval != graph[current_fanin->next->id].Cval;
+			break;
+
+		case XNOR:
+			current_fanin = curent_node->Fin;
+			curent_node->Cval = graph[current_fanin->id].Cval == graph[current_fanin->next->id].Cval;
+			break;
+
+		default:
+			break;
+		}
+		node_index++;
+	}
+
+	for (node_index = 0; node_index <= Tgat; node_index++) {
+		if (graph[node_index].Po == 1) {
+			output_vector[po_index] = graph[node_index].Cval + '0';
+			po_index++;
+		}
+	}
+	output_vector[po_index] = '\0';
+
+	return output_vector;
 }
