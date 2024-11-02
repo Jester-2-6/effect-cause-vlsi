@@ -27,40 +27,49 @@ void main(int argc, char** argv)
     orig_max = readBench(graph, fbench);                //read .isc file and return index of last node in graph formed
     fclose(fbench);                            //close file pointer for .isc file
 
+    // Print the original circuit
     PrintCircuit(graph, orig_max);                 //print all members of graph structure
 
+    // Duplicate the circuit and print it
     dupli_max = duplicateCircuit(graph, new_graph, orig_max);
     PrintCircuit(new_graph, dupli_max);                 //print all members of graph structure
 
+    // Write the .bench file for the duplicated circuit
     sprintf(filename1, "out/%s.bench", argv[1]);
     fbench = fopen(filename1, "w");
     writeBench(new_graph, fbench, dupli_max);
 
+    // Write the .vec file for the duplicated circuit
     sprintf(filename1, "out/%s.fault", argv[1]);
     writeFaultFile(dupli_max, filename1);
 
+    // Write all faulty circuits and run ATALANTA
     sprintf(filename1, "out/%s", argv[1]);
     writeAllErrors(new_graph, dupli_max, orig_max, filename1);
     runATALANTABatch(filename1);
 
+    // Pick pattern groups of 1
     sprintf(filename1, "out/%s/", argv[1]);
     sprintf(filename2, "out/%s_g1.pattern", argv[1]);
     writePatterns(filename1, 500, 1, filename2);
 
+    // Pick pattern groups of 2
     sprintf(filename2, "out/%s_g2.pattern", argv[1]);
     writePatterns(filename1, 500, 2, filename2);
 
+    // Pick pattern groups of 3
     sprintf(filename2, "out/%s_g3.pattern", argv[1]);
     writePatterns(filename1, 500, 3, filename2);
 
+    // Pick pattern groups of 4
     sprintf(filename2, "out/%s_g4.pattern", argv[1]);
     writePatterns(filename1, 500, 4, filename2);
 
+    // Select unique patterns from group and run all faults
     getUniquePatterns(argv[1], pattern_list, group);
-    runAllFaults(graph, orig_max, pattern_list, argv[1]);                                               //close file pointer for .out file
+    runAllFaults(graph, orig_max, pattern_list, argv[1]);           //close file pointer for .out file
 
     ClearCircuit(graph, Mnod);                                      //clear memeory for all members of graph
-    //for(a=0;a<Total;a++){ bzero(vector[a].piv,Mpi); }                //clear memeory for all members of vector
     return;
 }//end of main
 /****************************************************************************************************************************/
