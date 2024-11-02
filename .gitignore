@@ -88,3 +88,4 @@ project
 *.fault
 *.test
 *.pattern
+*.result
