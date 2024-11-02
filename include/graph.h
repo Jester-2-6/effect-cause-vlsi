@@ -24,7 +24,7 @@ Constant Declarations
 #define Min         9			// max node in degree (Nfi)
 #define Mpi       233			// max number of primary inputs
 #define Mpo       140			// max number of primary outputs
-#define Mpt       10			// max number of input patterns in .vec file
+#define Mpt       100			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
@@ -113,3 +113,8 @@ int ifPatternsExist(char*);
  * Simulation related functions
  */
 char* LogicSim(NODE*, int, char*);
+void getUniquePatterns(char*, char* [], int);
+void modifyType(NODE*, int, int);
+void runAllFaults(NODE*, int, char* [], char*);
+int parsePtrnChar(char);
+char revertPtrnChar(int);

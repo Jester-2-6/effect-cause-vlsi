@@ -35,11 +35,9 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 
 		if (graph[node_pointer_old].Type == 0) {
 			continue;
-		}
-		else if (graph[node_pointer_old].Type == INPT) {
+		} else if (graph[node_pointer_old].Type == INPT) {
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
-		}
-		else {
+		} else {
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
 			node_pointer_new++;
 			copyNode(&new_graph[node_pointer_new], &graph[node_pointer_old], node_pointer_old);
@@ -62,8 +60,7 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 				fot = fot->next;
 			}
 
-		}
-		else if (graph[i].Type > INPT) {
+		} else if (graph[i].Type > INPT) {
 			new_1 = mapOldtoNew(new_graph, i, node_pointer_new, 0);
 			new_2 = mapOldtoNew(new_graph, i, node_pointer_new, 1);
 
@@ -73,8 +70,7 @@ int duplicateCircuit(NODE* graph, NODE* new_graph, int tot) {
 				if (graph[fin->id].Type == INPT) {
 					InsertList(&new_graph[new_1].Fin, fin->id);
 					InsertList(&new_graph[new_2].Fin, fin->id);
-				}
-				else if (graph[fin->id].Type > INPT) {
+				} else if (graph[fin->id].Type > INPT) {
 					InsertList(&new_graph[new_1].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 0));
 					InsertList(&new_graph[new_2].Fin, mapOldtoNew(new_graph, fin->id, node_pointer_new, 1));
 				}
@@ -123,8 +119,7 @@ int insertComparator(NODE* graph, int tot) {
 				graph[i + 1].Nfo++;
 
 				graph[new_node_pointer].Nfi = 2;
-			}
-			else {
+			} else {
 				graph[new_node_pointer].Nfi = 1;
 			}
 
@@ -136,8 +131,7 @@ int insertComparator(NODE* graph, int tot) {
 
 			new_node_pointer++;
 			i += 2;
-		}
-		else {
+		} else {
 			i++;
 		}
 	}
@@ -162,8 +156,7 @@ int mapOldtoNew(NODE* graph, int old_id, int limit, int skip) {
 		if (graph[i].Mark == old_id) {
 			if (skip > 0) {
 				skip--;
-			}
-			else {
+			} else {
 				return i;
 			}
 		}
@@ -210,23 +203,21 @@ void LineToGate(char* line, NODE* Node, int* node_id_ptr, int* tot) {
 	// skip comment lines
 	if (line[0] == '\n' || line[0] == '#') {
 		return;
-	}
-	else if (line[0] == 'I') {
+
+	} else if (line[0] == 'I') {
 		// Handle inputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Type = INPT;
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
-	}
-	else if (line[0] == 'O') {
+	} else if (line[0] == 'O') {
 		// Handle outputs
 		nid_tmp = atoi(extractParenthesis(line));
 		Node[nid_tmp].Po = 1;
 		Node[nid_tmp].Type = INPT; // To handle direct outputs
 		if (nid_tmp > *tot) *tot = nid_tmp;
 
-	}
-	else {
+	} else {
 		// Handle gates
 		int fout = extractFout(line);
 		char* name = extractName(line);
@@ -389,8 +380,8 @@ void writeAllErrors(NODE* graph, int tot, int error_limit, char prefix[]) {
 				}
 
 			}
-		}
-		else if (fi_count >= 2) {
+
+		} else if (fi_count >= 2) {
 			for (j = AND; j <= XNOR; j++) {
 				// XOR and XNOR gates can only have 2 inputs due to atanlanta limitations
 				if ((j == XOR || j == XNOR) && fi_count != 2) {
@@ -483,8 +474,7 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 		for (i = 0; i < pattern_count; i++) {
 			fprintf(outfile, "%s\n", patterns[i]);
 		}
-	}
-	else {
+	} else {
 		// Randomly select patterns_per_fault number of patterns without repetition
 		for (i = 0; i < patterns_per_fault; i++) {
 			int index;
@@ -554,12 +544,27 @@ int ifPatternsExist(char* filename) {
 	return 0;
 }
 
-char* LogicSim(NODE* graph, int Tgat, char* pattern) {
-	int node_index = 0;
-	int pi_index = 0;
-	int po_index = 0;
-	int node_result = 0;
+int parsePtrnChar(char ptrn_char) {
+	int val;
+	val = ptrn_char - '0';
 
+	switch (val) {
+	case 0: return 0;
+	case 1: return 1;
+	default: return 2;
+	}
+}
+
+char revertPtrnChar(int ptrn_num) {
+	switch (ptrn_num) {
+	case 0: return '0';
+	case 1: return '1';
+	default: return 'x';
+	}
+}
+
+char* LogicSim(NODE* graph, int Tgat, char* pattern) {
+	int node_index, pi_index, po_index, node_result, ones_count;
 	char* output_vector = (char*)malloc(Tgat * sizeof(char));
 
 	NODE* curent_node = NULL;
@@ -567,11 +572,14 @@ char* LogicSim(NODE* graph, int Tgat, char* pattern) {
 
 	node_index = 0;
 	pi_index = 0;
+	po_index = 0;
+	node_result = 0;
+
 	while (node_index <= Tgat) {
 		curent_node = &graph[node_index];
 		switch (curent_node->Type) {
 		case INPT:
-			curent_node->Cval = pattern[pi_index] - '0';
+			curent_node->Cval = parsePtrnChar(pattern[pi_index]);
 			pi_index++;
 			break;
 
@@ -632,13 +640,37 @@ char* LogicSim(NODE* graph, int Tgat, char* pattern) {
 			break;
 
 		case XOR:
+			ones_count = 0;
 			current_fanin = curent_node->Fin;
-			curent_node->Cval = graph[current_fanin->id].Cval != graph[current_fanin->next->id].Cval;
+
+			while (current_fanin != NULL) {
+				if (graph[current_fanin->id].Cval == 1) ones_count++;
+				else if (graph[current_fanin->id].Cval == 2) {
+					ones_count = -1;
+					break;
+				}
+				current_fanin = current_fanin->next;
+			}
+
+			if (ones_count == -1) curent_node->Cval = 2;
+			else curent_node->Cval = (ones_count % 2) ? 1 : 0;
 			break;
 
 		case XNOR:
+			ones_count = 0;
 			current_fanin = curent_node->Fin;
-			curent_node->Cval = graph[current_fanin->id].Cval == graph[current_fanin->next->id].Cval;
+
+			while (current_fanin != NULL) {
+				if (graph[current_fanin->id].Cval == 1) ones_count++;
+				else if (graph[current_fanin->id].Cval == 2) {
+					ones_count = -1;
+					break;
+				}
+				current_fanin = current_fanin->next;
+			}
+
+			if (ones_count == -1) curent_node->Cval = 2;
+			else curent_node->Cval = (ones_count % 2) ? 0 : 1;
 			break;
 
 		default:
@@ -649,11 +681,111 @@ char* LogicSim(NODE* graph, int Tgat, char* pattern) {
 
 	for (node_index = 0; node_index <= Tgat; node_index++) {
 		if (graph[node_index].Po == 1) {
-			output_vector[po_index] = graph[node_index].Cval + '0';
+			output_vector[po_index] = revertPtrnChar(graph[node_index].Cval);
 			po_index++;
 		}
 	}
 	output_vector[po_index] = '\0';
 
 	return output_vector;
+}
+
+void getUniquePatterns(char* prefix, char* pattern_list[], int group) {
+	char filename[Mfnam];
+	sprintf(filename, "out/%s_g%d.pattern", prefix, group);
+
+	FILE* fp = fopen(filename, "r");
+	char line[Mlin];
+	int pattern_index, duplicate;
+
+	pattern_index = 0;
+	duplicate = 0;
+
+	while (fgets(line, sizeof(line), fp) && pattern_index < Mpt) {
+		if (line[0] == '\n' || line[0] == '\0') {
+			continue;
+		}
+
+		for (int i = 0; i < pattern_index; i++) {
+			if (strcmp(pattern_list[i], line) == 0) {
+				duplicate = 1;
+				break;
+			}
+		}
+
+		if (duplicate) {
+			duplicate = 0;
+			continue;
+		}
+
+		line[strlen(line) - 1] = '\0';
+		pattern_list[pattern_index] = malloc(Mpi * sizeof(char));
+		strcpy(pattern_list[pattern_index], line);
+		pattern_index++;
+	}
+}
+
+void modifyType(NODE* graph, int node_id, int fault_type) {
+	graph[node_id].Type = fault_type;
+}
+
+void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
+	int node_id, fault_type, pattern_index, original_type;
+	char* sim_result;
+	char filename[Mfnam];
+	FILE* fp;
+
+	sprintf(filename, "out/%s_all.result", prefix);
+	fp = fopen(filename, "w");
+
+	for (node_id = 0; node_id <= max; node_id++) {
+		if (graph[node_id].Type > INPT && graph[node_id].Type < BUFF) {
+			for (fault_type = AND; fault_type <= XNOR; fault_type++) {
+				original_type = graph[node_id].Type;
+				if (original_type == fault_type) {
+					continue;
+				}
+
+				modifyType(graph, node_id, fault_type);
+				for (pattern_index = 0; pattern_index < Mpt; pattern_index++) {
+					if (pattern_list[pattern_index] == NULL) break;
+
+					sim_result = LogicSim(graph, max, pattern_list[pattern_index]);
+					fprintf(
+						fp,
+						"Node: %d, Fault: %s, Pattern: %s -> %s\n",
+						node_id,
+						invertType(fault_type),
+						pattern_list[pattern_index],
+						sim_result
+					);
+				}
+				modifyType(graph, node_id, original_type);
+			}
+
+		} else if (graph[node_id].Type == BUFF || graph[node_id].Type == NOT) {
+			for (fault_type = BUFF; fault_type <= NOT; fault_type++) {
+				original_type = graph[node_id].Type;
+				if (original_type == fault_type) {
+					continue;
+				}
+
+				modifyType(graph, node_id, fault_type);
+				for (pattern_index = 0; pattern_index < Mpt; pattern_index++) {
+					if (pattern_list[pattern_index] == NULL) break;
+
+					sim_result = LogicSim(graph, max, pattern_list[pattern_index]);
+					fprintf(
+						fp,
+						"Node: %d, Fault: %s, Pattern: %s -> %s\n",
+						node_id,
+						invertType(fault_type),
+						pattern_list[pattern_index],
+						sim_result
+					);
+				}
+				modifyType(graph, node_id, original_type);
+			}
+		}
+	}
 }
