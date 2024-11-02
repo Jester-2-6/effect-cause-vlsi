@@ -42,6 +42,7 @@ Constant Declarations
 #define TokLen      10       // max length of token
 #define IscLineLen  100			// max length of bench file line
 #define MAX_PATTERNS 100
+#define IS_UNIX_LAB 1
 /***************************************************************************************************************************
 Structure Declarations
 ****************************************************************************************************************************/
