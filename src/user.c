@@ -729,7 +729,7 @@ void modifyType(NODE* graph, int node_id, int fault_type) {
 	graph[node_id].Type = fault_type;
 }
 
-void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
+void runAllFaultsold(NODE* graph, int max, char* pattern_list[], char* prefix) {
 	int node_id, fault_type, pattern_index, original_type;
 	char* sim_result;
 	char filename[Mfnam];
@@ -787,5 +787,132 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 				modifyType(graph, node_id, original_type);
 			}
 		}
+	}
+}
+
+int detectedAtPo(int ff_val, int f_val) {
+	if (ff_val == 48 && f_val == 49) {
+		return 1;
+	} else if (ff_val == 49 && f_val == 48) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
+	int node_id, fault_type, pattern_index, original_type, po_index;
+	char* sim_result, * ff_output;
+	char filename[Mfnam];
+	int po_count;
+	FILE* fp;
+
+	po_count = 0;
+
+	for (node_id = 0; node_id <= max; node_id++) {
+		if (graph[node_id].Po == 1) po_count++;
+	}
+
+	char** fault_lists;
+
+	fault_lists = (char**)malloc(FLIST_LINE_LEN * sizeof(char*));
+	for (po_index = 0; po_index < po_count; po_index++) {
+		fault_lists[po_index] = (char*)malloc((max + 1) * sizeof(char*));
+		for (int node_id = 0; node_id <= max; node_id++) {
+			fault_lists[po_index] = NULL;
+		}
+	}
+
+	sprintf(filename, "out/%s_all.result", prefix);
+	fp = fopen(filename, "w");
+
+	for (pattern_index = 0; pattern_index < Mpt; pattern_index++) {
+		if (pattern_list[pattern_index] == NULL) break;
+
+		ff_output = LogicSim(graph, max, pattern_list[pattern_index]);
+		fprintf(fp, "Pattern: %s -> %s\n", pattern_list[pattern_index], ff_output);
+
+		for (node_id = 0; node_id <= max; node_id++) {
+			if (graph[node_id].Type > INPT && graph[node_id].Type < BUFF) {
+				for (fault_type = AND; fault_type <= XNOR; fault_type++) {
+					original_type = graph[node_id].Type;
+					if (original_type == fault_type) continue;
+
+					modifyType(graph, node_id, fault_type);
+					sim_result = LogicSim(graph, max, pattern_list[pattern_index]);
+					modifyType(graph, node_id, original_type);
+
+					for (po_index = 0; po_index < po_count; po_index++) {
+						if (detectedAtPo(ff_output[po_index], sim_result[po_index])) {
+							if (fault_lists[po_index] == NULL) {
+								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
+								sprintf(
+									fault_lists[po_index],
+									"Node: %d, Fault: %s, Output: %s\n",
+									node_id,
+									invertType(fault_type),
+									sim_result
+								);
+							} else {
+								sprintf(
+									fault_lists[po_index],
+									"%sNode: %d, Fault: %s, Output: %s\n",
+									fault_lists[po_index],
+									node_id,
+									invertType(fault_type),
+									sim_result
+								);
+							}
+						}
+					}
+				}
+			} else if (graph[node_id].Type == BUFF || graph[node_id].Type == NOT) {
+				for (fault_type = BUFF; fault_type <= NOT; fault_type++) {
+					original_type = graph[node_id].Type;
+					if (original_type == fault_type) continue;
+
+					modifyType(graph, node_id, fault_type);
+					sim_result = LogicSim(graph, max, pattern_list[pattern_index]);
+					modifyType(graph, node_id, original_type);
+
+					for (po_index = 0; po_index < po_count; po_index++) {
+						if (detectedAtPo(ff_output[po_index], sim_result[po_index])) {
+							if (fault_lists[po_index] == NULL) {
+								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
+								sprintf(
+									fault_lists[po_index],
+									"Node: %d, Fault: %s, Output: %s\n",
+									node_id,
+									invertType(fault_type),
+									sim_result
+								);
+							} else {
+								sprintf(
+									fault_lists[po_index],
+									"%sNode: %d, Fault: %s, Output: %s\n",
+									fault_lists[po_index],
+									node_id,
+									invertType(fault_type),
+									sim_result
+								);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (po_index = 0; po_index < po_count; po_index++) {
+			fprintf(fp, "Detected at PO %d:\n", po_index);
+			for (int node_id = 0; node_id < max; node_id++) {
+				if (fault_lists[po_index] != NULL) {
+					fprintf(fp, "%s", fault_lists[po_index]);
+					fault_lists[po_index] = NULL;
+				}
+			}
+			fprintf(fp, "\n");
+		}
+
+		fprintf(fp, "-------------------------------------------------\n");
 	}
 }
