@@ -486,6 +486,8 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 			fprintf(outfile, "%s\n", patterns[index]);
 		}
 	}
+
+	fprintf(outfile, "\n");
 }
 
 void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, char outfile[]) {
@@ -830,7 +832,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 		if (pattern_list[pattern_index] == NULL) break;
 
 		ff_output = LogicSim(graph, max, pattern_list[pattern_index]);
-		fprintf(fp, "Pattern: %s -> %s\n", pattern_list[pattern_index], ff_output);
+		fprintf(fp, "%s%s%s\n", BEGIN_PATTERN, pattern_list[pattern_index], DELIMITER);
 
 		for (node_id = 0; node_id <= max; node_id++) {
 			if (graph[node_id].Type > INPT && graph[node_id].Type < BUFF) {
@@ -848,19 +850,19 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
 								sprintf(
 									fault_lists[po_index],
-									"Node: %d, Fault: %s, Output: %s\n",
+									"N%d_F%d%s\n",
 									node_id,
-									invertType(fault_type),
-									sim_result
+									fault_type,
+									DELIMITER
 								);
 							} else {
 								sprintf(
 									fault_lists[po_index],
-									"%sNode: %d, Fault: %s, Output: %s\n",
+									"%sN%d_F%d%s\n",
 									fault_lists[po_index],
 									node_id,
-									invertType(fault_type),
-									sim_result
+									fault_type,
+									DELIMITER
 								);
 							}
 						}
@@ -881,19 +883,19 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
 								sprintf(
 									fault_lists[po_index],
-									"Node: %d, Fault: %s, Output: %s\n",
+									"N%d_F%d%s\n",
 									node_id,
-									invertType(fault_type),
-									sim_result
+									fault_type,
+									DELIMITER
 								);
 							} else {
 								sprintf(
 									fault_lists[po_index],
-									"%sNode: %d, Fault: %s, Output: %s\n",
+									"%sN%d_F%d%s\n",
 									fault_lists[po_index],
 									node_id,
-									invertType(fault_type),
-									sim_result
+									fault_type,
+									DELIMITER
 								);
 							}
 						}
@@ -903,16 +905,16 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 		}
 
 		for (po_index = 0; po_index < po_count; po_index++) {
-			fprintf(fp, "Detected at PO %d:\n", po_index);
+			fprintf(fp, "%s%d%s:\n", BEGIN_PO, po_index, DELIMITER);
 			for (int node_id = 0; node_id < max; node_id++) {
 				if (fault_lists[po_index] != NULL) {
 					fprintf(fp, "%s", fault_lists[po_index]);
 					fault_lists[po_index] = NULL;
 				}
 			}
-			fprintf(fp, "\n");
+			fprintf(fp, "%s\n", END_PO);
 		}
 
-		fprintf(fp, "-------------------------------------------------\n");
+		fprintf(fp, "%s\n", END_PATTERN);
 	}
 }

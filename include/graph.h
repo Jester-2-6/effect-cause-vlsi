@@ -42,8 +42,16 @@ Constant Declarations
 #define TokLen      10       // max length of token
 #define IscLineLen  100			// max length of bench file line
 #define MAX_PATTERNS 100
-#define IS_UNIX_LAB 1
+#define IS_UNIX_LAB 0
 #define FLIST_LINE_LEN 200
+
+// File reading flags
+#define BEGIN_PATTERN "Begin Pattern |"
+#define END_PATTERN "End Pattern\n"
+#define BEGIN_PO "Begin PO |"
+#define END_PO "End PO\n"
+#define DELIMITER "|"
+
 /***************************************************************************************************************************
 Structure Declarations
 ****************************************************************************************************************************/
