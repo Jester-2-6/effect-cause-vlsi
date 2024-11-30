@@ -26,6 +26,9 @@ Constant Declarations
 #define Mpo       140			// max number of primary outputs
 #define Mpt       100			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
+#define Mfl       100			// max number of fault lists read at a time
+#define Mfpl      100			// max number of faults per list
+#define Mchf      20			// max number of characters in a fault name
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
 #define AND  2				// AND 
@@ -50,8 +53,7 @@ Constant Declarations
 #define END_PATTERN "End Pattern\n"
 #define BEGIN_PO "Begin PO |"
 #define END_PO "End PO\n"
-#define DELIMITER "|"
-
+#define DELIMITER '|'
 /***************************************************************************************************************************
 Structure Declarations
 ****************************************************************************************************************************/
@@ -128,3 +130,9 @@ void modifyType(NODE*, int, int);
 void runAllFaults(NODE*, int, char* [], char*);
 int parsePtrnChar(char);
 char revertPtrnChar(int);
+/****************************************************************************************************************************/
+/**
+ * Resolution related functions
+ */
+void reportResolutions(NODE*, int, int, char*);
+int validFaultLists(char**, char**, char*, int);

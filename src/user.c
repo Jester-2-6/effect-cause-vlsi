@@ -487,7 +487,7 @@ void select_random_patterns(const char* filename, int patterns_per_fault, FILE* 
 		}
 	}
 
-	fprintf(outfile, "\n");
+	fprintf(outfile, "%c\n", DELIMITER);
 }
 
 void writePatterns(char path_prefix[], int fault_count, int patterns_per_fault, char outfile[]) {
@@ -704,7 +704,7 @@ void getUniquePatterns(char* prefix, char* pattern_list[], int group) {
 	duplicate = 0;
 
 	while (fgets(line, sizeof(line), fp) && pattern_index < Mpt) {
-		if (line[0] == '\n' || line[0] == '\0') {
+		if (line[0] == DELIMITER || line[0] == '\0') {
 			continue;
 		}
 
@@ -832,7 +832,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 		if (pattern_list[pattern_index] == NULL) break;
 
 		ff_output = LogicSim(graph, max, pattern_list[pattern_index]);
-		fprintf(fp, "%s%s%s\n", BEGIN_PATTERN, pattern_list[pattern_index], DELIMITER);
+		fprintf(fp, "%s%s%c\n", BEGIN_PATTERN, pattern_list[pattern_index], DELIMITER);
 
 		for (node_id = 0; node_id <= max; node_id++) {
 			if (graph[node_id].Type > INPT && graph[node_id].Type < BUFF) {
@@ -850,7 +850,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
 								sprintf(
 									fault_lists[po_index],
-									"N%d_F%d%s\n",
+									"N%d_F%d%c\n",
 									node_id,
 									fault_type,
 									DELIMITER
@@ -858,7 +858,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 							} else {
 								sprintf(
 									fault_lists[po_index],
-									"%sN%d_F%d%s\n",
+									"%sN%d_F%d%c\n",
 									fault_lists[po_index],
 									node_id,
 									fault_type,
@@ -883,7 +883,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 								fault_lists[po_index] = (char*)malloc(FLIST_LINE_LEN * sizeof(char));
 								sprintf(
 									fault_lists[po_index],
-									"N%d_F%d%s\n",
+									"N%d_F%d%c\n",
 									node_id,
 									fault_type,
 									DELIMITER
@@ -891,7 +891,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 							} else {
 								sprintf(
 									fault_lists[po_index],
-									"%sN%d_F%d%s\n",
+									"%sN%d_F%d%c\n",
 									fault_lists[po_index],
 									node_id,
 									fault_type,
@@ -905,7 +905,7 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 		}
 
 		for (po_index = 0; po_index < po_count; po_index++) {
-			fprintf(fp, "%s%d%s:\n", BEGIN_PO, po_index, DELIMITER);
+			fprintf(fp, "%s%d%c\n", BEGIN_PO, po_index, DELIMITER);
 			for (int node_id = 0; node_id < max; node_id++) {
 				if (fault_lists[po_index] != NULL) {
 					fprintf(fp, "%s", fault_lists[po_index]);
@@ -917,4 +917,93 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 
 		fprintf(fp, "%s\n", END_PATTERN);
 	}
+}
+
+void reportResolutions(NODE* graph, int max, int group, char* prefix) {
+	char patternsFName[Mfnam];
+	FILE* patternsFP;
+
+	sprintf(patternsFName, "out/%s_g%d.pattern", prefix, group);
+	patternsFP = fopen(patternsFName, "r");
+
+	char line[Mlin];
+	char* pattern_list[Mpt];
+	char* faultLists[Mfl];
+	int pattern_index, i, flist_count;
+
+	pattern_index = 0;
+	flist_count = 0;
+
+	while (fgets(line, sizeof(line), patternsFP) && pattern_index < Mpt) {
+		if (line[0] == '\0') {
+			continue;
+		} else if (line[0] == DELIMITER) {
+			for (i = 0; i < Mfl; i++) {
+				faultLists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+			}
+
+			// run fault picker
+			flist_count = validFaultLists(pattern_list, faultLists, prefix, pattern_index);
+
+			for (int i = 0; i < pattern_index; i++) {
+				free(pattern_list[i]);
+			}
+			for (i = 0; i < Mfl; i++) {
+				free(faultLists[i]);
+			}
+			pattern_index = 0;
+		} else {
+			line[strlen(line) - 1] = '\0'; // Remove newline character
+			pattern_list[pattern_index] = malloc(Mpi * sizeof(char));
+			strcpy(pattern_list[pattern_index], line);
+			pattern_index++;
+		}
+	}
+
+	fclose(patternsFP);
+}
+
+int validFaultLists(char** pattern_set, char** faultLists, char* prefix, int pattern_count) {
+	char faultsFName[Mfnam];
+	FILE* faultsFP;
+	int i, reading, list_index;
+	char line[Mlin];
+	char temp_pattern[Mlin];
+	char temp_line[Mlin];
+
+	sprintf(faultsFName, "out/%s_all.result", prefix);
+	faultsFP = fopen(faultsFName, "r");
+	reading = 0;
+	list_index = 0;
+
+	while (fgets(line, sizeof(line), faultsFP)) {
+		if (line[0] == '\0') {
+			continue;
+		} else if (strncmp(line, BEGIN_PATTERN, strlen(BEGIN_PATTERN)) == 0) {
+			for (i = 0; i < pattern_count; i++) {
+				sprintf(temp_line, "%s%s%c*", BEGIN_PATTERN, "%s", DELIMITER);
+				sscanf(line, temp_line, temp_pattern);
+				temp_pattern[strlen(temp_pattern) - 1] = '\0'; // Remove the trailing '|'
+				if (strcmp(temp_pattern, pattern_set[i]) == 0) {
+					reading = 1;
+					break;
+				}
+			}
+		} else if (reading > 0) {
+			if (strncmp(line, BEGIN_PO, strlen(BEGIN_PO)) == 0) {
+				sprintf(temp_line, "%s%s%c", BEGIN_PO, "%s", DELIMITER);
+				sscanf(line, temp_line, temp_pattern);
+				sprintf(faultLists[list_index], "%s%s\n", BEGIN_PO, temp_pattern);
+			} else if (strncmp(line, END_PO, sizeof(END_PO)) == 0) {
+				sprintf(faultLists[list_index], "%s%s\n", faultLists[list_index], END_PO);
+				list_index++;
+			} else if (strncmp(line, END_PATTERN, sizeof(END_PATTERN)) == 0) {
+				reading = 0;
+			} else {
+				sprintf(faultLists[list_index], "%s%s", faultLists[list_index], line);
+			}
+		}
+	}
+
+	fclose(faultsFP);
 }
