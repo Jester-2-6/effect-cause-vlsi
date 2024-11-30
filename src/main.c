@@ -18,6 +18,8 @@ void main(int argc, char** argv)
     // argv settings
     group = (argc > 2) ? atoi(argv[2]) : 1; // Default value is 1 if argv[2] is not present
 
+    printf("Group: %s\n", argv[1]);
+
     // clean the outputs directory
     system("rm -rf out/*");
 
@@ -69,7 +71,10 @@ void main(int argc, char** argv)
     getUniquePatterns(argv[1], pattern_list, group);
     runAllFaults(graph, orig_max, pattern_list, argv[1]);           //close file pointer for .out file
 
+    reportResolutions(graph, orig_max, group, argv[1]);
+
     ClearCircuit(graph, Mnod);                                      //clear memeory for all members of graph
+
     return;
 }//end of main
 /****************************************************************************************************************************/
