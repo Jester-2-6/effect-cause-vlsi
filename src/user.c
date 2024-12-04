@@ -920,16 +920,24 @@ void runAllFaults(NODE* graph, int max, char* pattern_list[], char* prefix) {
 }
 
 void reportResolutions(NODE* graph, int max, int group, char* prefix) {
-	char patternsFName[Mfnam];
-	FILE* patternsFP;
+	char patternsFName[Mfnam], resFName[Mfnam];
+	FILE* patternsFP, * resFP;
 
 	sprintf(patternsFName, "out/%s_g%d.pattern", prefix, group);
+	sprintf(resFName, "out/%s_g%d.resolutions", prefix, group);
 	patternsFP = fopen(patternsFName, "r");
+	resFP = fopen(resFName, "w");
 
 	char line[Mlin];
 	char* pattern_list[Mpt];
-	char* faultLists[Mfl];
-	int pattern_index, i, flist_count;
+	char* fault_lists[Mfl];
+	char* marked_lists[Mfl];
+	char* temp_marked_lists[Mfl];
+	char* unmarked_lists[Mfl];
+	char* picked_faults[Mfl];
+	char* unique_faults[Mfl];
+	char pick_fault[Mchf];
+	int pattern_index, i, j, flist_count, mark_count, unique_count, resolution;
 
 	pattern_index = 0;
 	flist_count = 0;
@@ -939,19 +947,51 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 			continue;
 		} else if (line[0] == DELIMITER) {
 			for (i = 0; i < Mfl; i++) {
-				faultLists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+				fault_lists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+				picked_faults[i] = (char*)malloc(Mchf * sizeof(char));
 			}
 
-			// run fault picker
-			flist_count = validFaultLists(pattern_list, faultLists, prefix, pattern_index);
+			fprintf(resFP, "Running Pattern Group\n");
+			fprintf(resFP, "---------------------\n");
+			for (i = 0; i < pattern_index; i++) fprintf(resFP, "%s\n", pattern_list[i]);
+			fprintf(resFP, "---------------------\n");
 
-			for (int i = 0; i < pattern_index; i++) {
+			// run pattern filter
+			flist_count = validFaultLists(pattern_list, fault_lists, prefix, pattern_index);
+
+			// build unique fault list
+			unique_count = buildUniqueFaultList(fault_lists, unique_faults, flist_count);
+
+			// pick random fault
+			for (j = 0; j < Mflr; j++) {
+				for (i = 0; i < Mfl; i++) {
+					marked_lists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+					unmarked_lists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+				}
+
+				pickRandomFault(unique_faults, picked_faults, pick_fault, unique_count);
+				mark_count = markLists(fault_lists, flist_count, pick_fault, marked_lists, unmarked_lists);
+
+				dropFaults(marked_lists, unmarked_lists, temp_marked_lists, mark_count, flist_count - mark_count);
+
+				resolution = findCommonFaults(temp_marked_lists, flist_count);
+
+				fprintf(resFP, "Fault: %s, Resolution: %d\n", pick_fault, resolution);
+
+				for (i = 0; i < pattern_index; i++) {
+					free(marked_lists[i]);
+					free(unmarked_lists[i]);
+				}
+
+			}
+
+			for (i = 0; i < Mfl; i++) free(fault_lists[i]);
+			for (i = 0; i < pattern_index; i++) {
 				free(pattern_list[i]);
-			}
-			for (i = 0; i < Mfl; i++) {
-				free(faultLists[i]);
+				free(picked_faults[i]);
 			}
 			pattern_index = 0;
+
 		} else {
 			line[strlen(line) - 1] = '\0'; // Remove newline character
 			pattern_list[pattern_index] = malloc(Mpi * sizeof(char));
@@ -961,6 +1001,138 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 	}
 
 	fclose(patternsFP);
+}
+
+int markLists(char** all_lists, int flist_count, char* fault, char** marked_lists, char** unmarked_lists) {
+	int mark_count, i;
+
+	mark_count = 0;
+
+	for (i = 0;i < flist_count;i++) {
+		if (strncmp(all_lists[i], BEGIN_PATTERN, strlen(BEGIN_PATTERN)) == 0) continue;
+
+		if (strstr(all_lists[i], fault) != NULL) {
+			sprintf(marked_lists[mark_count], "%s", all_lists[i]);
+			mark_count++;
+		} else {
+			sprintf(unmarked_lists[i - mark_count], "%s", all_lists[i]);
+		}
+	}
+
+	return mark_count;
+}
+
+void dropFaults(char** marked_lists, char** unmarked_lists, char** new_marked_lists, int mlist_count, int ulist_count) {
+	int i, j, duplicate;
+	char* linem, * lineu;
+
+	for (i = 0;i < mlist_count;i++) {
+		linem = strtok(marked_lists[i], "\n");
+		new_marked_lists[i] = (char*)malloc(Mfpl * Mchf * sizeof(char));
+
+		while (linem != NULL) {
+			if (strncmp(linem, "N", 1) == 0) {
+				lineu = strtok(unmarked_lists[i], "\n");
+				duplicate = 0;
+				while (lineu != NULL) {
+					if (strncmp(lineu, linem, sizeof(linem)) == 0) {
+						duplicate = 1;
+						break;
+					}
+					lineu = strtok(NULL, "\n");
+				}
+				if (!duplicate) sprintf(new_marked_lists[i], "%s%s", new_marked_lists[i], linem);
+			} else {
+				sprintf(new_marked_lists[i], "%s%s", new_marked_lists[i], linem);
+			}
+			linem = strtok(NULL, "\n");
+		}
+	}
+}
+
+int findCommonFaults(char** fault_lists, int list_count) {
+	int i, j, common_count;
+	char* line;
+
+	common_count = 0;
+
+	for (i = 0; i < list_count; i++) {
+		line = strtok(fault_lists[i], "\n");
+		while (line != NULL) {
+			if (strncmp(line, "N", 1) == 0) {
+				int is_common = 1;
+				for (j = 0; j < list_count; j++) {
+					if (strstr(fault_lists[j], line) == NULL) {
+						is_common = 0;
+						break;
+					}
+				}
+				if (is_common) common_count++;
+			}
+			line = strtok(NULL, "\n");
+		}
+	}
+
+	return common_count;
+}
+
+int buildUniqueFaultList(char** fault_lists, char** unique_faults, int flist_count) {
+	int i, j, unique_count;
+	char* line;
+
+	unique_count = 0;
+
+	for (i = 0; i < Mfl; i++) unique_faults[i] = (char*)malloc(Mchf * sizeof(char));
+
+	for (i = 0;i < flist_count;i++) {
+		line = strtok(fault_lists[i], "\n");
+		while (line != NULL) {
+			if (strncmp(line, "N", 1) == 0) {
+				int is_unique = 1;
+				for (j = 0; j < unique_count; j++) {
+					if (strcmp(unique_faults[j], line) == 0) {
+						is_unique = 0;
+						break;
+					}
+				}
+				if (is_unique) {
+					strcpy(unique_faults[unique_count], line);
+					unique_count++;
+				}
+			}
+			line = strtok(NULL, "\n");
+		}
+	}
+
+	return unique_count;
+}
+
+void pickRandomFault(char** unique_fault_list, char** fault_list, char* fName, int fault_count) {
+	int unique_index, found;
+
+	found = 0;
+
+	while (!found) {
+		unique_index = rand() % fault_count;
+		found = 1;
+
+		for (int i = 0; i < fault_count; i++) {
+			if (strcmp(fault_list[i], unique_fault_list[unique_index]) == 0) {
+				found = 0;
+				break;
+			}
+		}
+
+		if (found) strcpy(fName, unique_fault_list[unique_index]);
+	}
+}
+
+void readSequence(char line[], char prefix[], char dest[]) {
+	char temp_line[Mlin];
+
+	sprintf(temp_line, "%s%s%c", prefix, "%s", DELIMITER);
+	sscanf(line, temp_line, dest);
+	dest[strlen(dest) - 1] = '\0'; // Remove the trailing '|'
 }
 
 int validFaultLists(char** pattern_set, char** faultLists, char* prefix, int pattern_count) {
@@ -976,34 +1148,35 @@ int validFaultLists(char** pattern_set, char** faultLists, char* prefix, int pat
 	reading = 0;
 	list_index = 0;
 
-	while (fgets(line, sizeof(line), faultsFP)) {
-		if (line[0] == '\0') {
-			continue;
-		} else if (strncmp(line, BEGIN_PATTERN, strlen(BEGIN_PATTERN)) == 0) {
-			for (i = 0; i < pattern_count; i++) {
-				sprintf(temp_line, "%s%s%c*", BEGIN_PATTERN, "%s", DELIMITER);
-				sscanf(line, temp_line, temp_pattern);
-				temp_pattern[strlen(temp_pattern) - 1] = '\0'; // Remove the trailing '|'
-				if (strcmp(temp_pattern, pattern_set[i]) == 0) {
-					reading = 1;
+	for (i = 0; i < pattern_count; i++) {
+		sprintf(faultLists[list_index], "%s%s%c\n", BEGIN_PATTERN, pattern_set[i], DELIMITER);
+		list_index++;
+		while (fgets(line, sizeof(line), faultsFP)) {
+			if (line[0] == '\0') {
+				continue;
+			} else if (strncmp(line, BEGIN_PATTERN, strlen(BEGIN_PATTERN)) == 0) {
+				readSequence(line, BEGIN_PATTERN, temp_pattern);
+				if (strcmp(temp_pattern, pattern_set[i]) == 0) reading = 1;
+			} else if (reading > 0) {
+				if (strncmp(line, BEGIN_PO, strlen(BEGIN_PO)) == 0) {
+					readSequence(line, BEGIN_PO, temp_pattern);
+					sprintf(faultLists[list_index], "%s%s%c\n", BEGIN_PO, temp_pattern, DELIMITER);
+				} else if (strncmp(line, END_PO, strlen(END_PO)) == 0) {
+					sprintf(faultLists[list_index], "%s%s\n", faultLists[list_index], END_PO);
+					list_index++;
+				} else if (strncmp(line, END_PATTERN, strlen(END_PATTERN)) == 0) {
+					reading = 0;
 					break;
+				} else {
+					sprintf(faultLists[list_index], "%s%s", faultLists[list_index], line);
 				}
-			}
-		} else if (reading > 0) {
-			if (strncmp(line, BEGIN_PO, strlen(BEGIN_PO)) == 0) {
-				sprintf(temp_line, "%s%s%c", BEGIN_PO, "%s", DELIMITER);
-				sscanf(line, temp_line, temp_pattern);
-				sprintf(faultLists[list_index], "%s%s\n", BEGIN_PO, temp_pattern);
-			} else if (strncmp(line, END_PO, sizeof(END_PO)) == 0) {
-				sprintf(faultLists[list_index], "%s%s\n", faultLists[list_index], END_PO);
-				list_index++;
-			} else if (strncmp(line, END_PATTERN, sizeof(END_PATTERN)) == 0) {
-				reading = 0;
-			} else {
-				sprintf(faultLists[list_index], "%s%s", faultLists[list_index], line);
+
 			}
 		}
+		sprintf(faultLists[list_index], "%s%s\n", faultLists[list_index], END_PATTERN);
 	}
 
 	fclose(faultsFP);
+
+	return list_index;
 }

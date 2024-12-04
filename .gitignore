@@ -89,3 +89,4 @@ project
 *.test
 *.pattern
 *.result
+*.resolutions

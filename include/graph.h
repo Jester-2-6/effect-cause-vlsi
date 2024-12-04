@@ -29,6 +29,9 @@ Constant Declarations
 #define Mfl       100			// max number of fault lists read at a time
 #define Mfpl      100			// max number of faults per list
 #define Mchf      20			// max number of characters in a fault name
+#define Mflr      15			// max number of faults to check resolution
+#define Mrd      25			// max number of retries for random fault picking
+
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
 #define AND  2				// AND 
@@ -136,3 +139,9 @@ char revertPtrnChar(int);
  */
 void reportResolutions(NODE*, int, int, char*);
 int validFaultLists(char**, char**, char*, int);
+void readSequence(char[], char[], char[]);
+int markLists(char**, int, char*, char**, char**);
+void pickRandomFault(char**, char**, char*, int);
+int buildUniqueFaultList(char**, char**, int);
+int findCommonFaults(char**, int);
+void dropFaults(char**, char**, char**, int, int);
