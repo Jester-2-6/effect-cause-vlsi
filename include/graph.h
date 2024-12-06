@@ -24,13 +24,13 @@ Constant Declarations
 #define Min         9			// max node in degree (Nfi)
 #define Mpi       233			// max number of primary inputs
 #define Mpo       140			// max number of primary outputs
-#define Mpt       100			// max number of input patterns in .vec file
+#define Mpt       500			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
 #define Mfl       100			// max number of fault lists read at a time
 #define Mfpl      100			// max number of faults per list
-#define Mchf      20			// max number of characters in a fault name
-#define Mflr      15			// max number of faults to check resolution
-#define Mrd      25			// max number of retries for random fault picking
+#define Mchf      200			// max number of characters in a fault name
+#define Mflr      150			// max number of faults to check resolution
+#define Mrd      250			// max number of retries for random fault picking
 
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
@@ -140,7 +140,7 @@ char revertPtrnChar(int);
 void reportResolutions(NODE*, int, int, char*);
 int validFaultLists(char**, char**, char*, int);
 void readSequence(char[], char[], char[]);
-int markLists(char**, int, char*, char**, char**);
+int markLists(char**, int*, char*, char**, char**);
 void pickRandomFault(char**, char**, char*, int);
 int buildUniqueFaultList(char**, char**, int);
 int findCommonFaults(char**, int);
