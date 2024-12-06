@@ -61,7 +61,7 @@ void main(int argc, char** argv)
 
     // Pick pattern groups of 3
     sprintf(filename2, "out/%s_g3.pattern", argv[1]);
-    writePatterns(filename1, 500, 3, filename2);
+    writePatterns(filename1, 50, 3, filename2);
 
     // Pick pattern groups of 4
     sprintf(filename2, "out/%s_g4.pattern", argv[1]);
