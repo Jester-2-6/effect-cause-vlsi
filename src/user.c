@@ -874,12 +874,14 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 	char* temp_marked_lists[Mfl];
 	char* unmarked_lists[Mfl];
 	char* picked_faults;
-	char* unique_faults[Mfl];
+	char* unique_faults[Muf];
 	char pick_fault[Mchf];
 	int pattern_index, i, j, k, flist_count, mark_count, unique_count, resolution, init_flist_count;
 
 	pattern_index = 0;
 	flist_count = 0;
+
+	for (i = 0; i < Muf; i++) unique_faults[i] = (char*)malloc(Mchf * sizeof(char));
 
 	while (fgets(line, sizeof(line), patternsFP) && pattern_index < Mpt) {
 		if (line[0] == '\0') {
@@ -918,7 +920,7 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 
 				fprintf(resFP, "Fault: %s, Resolution: %d\n", pick_fault, resolution);
 
-				for (i = 0; i < pattern_index; i++) {
+				for (i = 0; i < Mfl; i++) {
 					free(marked_lists[i]);
 					free(unmarked_lists[i]);
 				}
@@ -929,7 +931,6 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 
 			for (i = 0; i < Mfl; i++) free(fault_lists[i]);
 			for (i = 0; i < pattern_index; i++) free(pattern_list[i]);
-			// free(picked_faults);
 			pattern_index = 0;
 
 		} else {
@@ -939,6 +940,8 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 			pattern_index++;
 		}
 	}
+
+	for (i = 0; i < Muf; i++) free(unique_faults[i]);
 
 	fclose(patternsFP);
 	fclose(resFP);
@@ -989,7 +992,7 @@ void dropFaults(char** marked_lists, char** unmarked_lists, char** new_marked_li
 						duplicate = 1;
 						break;
 					}
-				}
+				} 
 
 				if (!duplicate) sprintf(new_marked_lists[i], "%s%s\n", new_marked_lists[i], linem);
 
@@ -1062,6 +1065,8 @@ int buildUniqueFaultList(char** fault_lists, char** unique_faults, int flist_cou
 				if (is_unique) {
 					strcpy(unique_faults[unique_count], line);
 					unique_count++;
+
+					if (unique_count >= Mflr) break;
 				}
 			}
 			line = strtok(NULL, "\n");

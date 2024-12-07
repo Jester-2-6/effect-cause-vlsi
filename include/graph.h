@@ -27,10 +27,11 @@ Constant Declarations
 #define Mpt       500			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
 #define Mfl       100			// max number of fault lists read at a time
-#define Mfpl      100			// max number of faults per list
-#define Mchf      200			// max number of characters in a fault name
-#define Mflr      150			// max number of faults to check resolution
-#define Mrd      250			// max number of retries for random fault picking
+#define Mfpl      1000			// max number of faults per list
+#define Mchf      50			// max number of characters in a fault name
+#define Mflr      500			// max number of faults to check resolution
+#define Mrd       250			// max number of retries for random fault picking
+#define Muf       1000			// max number of unique faults
 
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
