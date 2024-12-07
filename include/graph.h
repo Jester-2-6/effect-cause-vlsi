@@ -141,7 +141,7 @@ void reportResolutions(NODE*, int, int, char*);
 int validFaultLists(char**, char**, char*, int);
 void readSequence(char[], char[], char[]);
 int markLists(char**, int*, char*, char**, char**);
-void pickRandomFault(char**, char**, char*, int);
+void pickRandomFault(char**, char*, char*, int);
 int buildUniqueFaultList(char**, char**, int);
 int findCommonFaults(char**, int);
 void dropFaults(char**, char**, char**, int, int);
