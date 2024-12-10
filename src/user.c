@@ -936,10 +936,13 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 
 			}
 
-			fprintf(resFP, "---------------------\n");
-			fprintf(resFP, "Max: %d\n", max_res);
-			fprintf(resFP, "Min: %d\n", min_res);
-			fprintf(resFP, "Avg: %.2f\n", (float)avg_res / j);
+			if (max_res > 0) {
+				fprintf(resFP, "---------------------\n");
+				fprintf(resFP, "Max: %d\n", max_res);
+				fprintf(resFP, "Min: %d\n", min_res);
+				fprintf(resFP, "Avg: %.2f\n", (float)avg_res / j);
+			}
+
 			fprintf(resFP, "---------------------\n");
 
 			for (i = 0; i < Mfl; i++) free(fault_lists[i]);

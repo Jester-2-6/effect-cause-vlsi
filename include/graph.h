@@ -17,7 +17,7 @@ Constant Declarations
 // VARIOUS CONSTANTS
 #define Mfnam     200			// max size for a file name
 #define Mnod    15000 		        // max number of nodes in a graph/node
-#define Mlin      200			// max size of characters in a line
+#define Mlin      250			// max size of characters in a line
 #define Mnam       25			// max size of a node name
 #define Mtyp       10			// max type of nodes/gates
 #define Mout       16		        // max node out degree (Nfo)
@@ -26,7 +26,7 @@ Constant Declarations
 #define Mpo       140			// max number of primary outputs
 #define Mpt       500			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
-#define Mfl       500			// max number of fault lists read at a time
+#define Mfl       1000			// max number of fault lists read at a time
 #define Mfpl      1000			// max number of faults per list
 #define Mchf      50			// max number of characters in a fault name
 #define Mflr      500			// max number of faults to check resolution
