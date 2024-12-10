@@ -1,0 +1,545 @@
+Running Pattern Group
+---------------------
+101xx
+---------------------
+Fault: N10_F2|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N10_F7|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N10_F4|, Resolution: 6
+---------------------
+Max: 6
+Min: 6
+Avg: 6.00
+---------------------
+Running Pattern Group
+---------------------
+0011x
+---------------------
+Fault: N10_F2|, Resolution: 6
+Fault: N10_F7|, Resolution: 6
+Fault: N16_F4|, Resolution: 3
+Fault: N23_F4|, Resolution: 4
+Fault: N22_F2|, Resolution: 6
+Fault: N16_F2|, Resolution: 3
+Fault: N10_F5|, Resolution: 6
+Fault: N22_F4|, Resolution: 6
+Fault: N23_F7|, Resolution: 4
+Fault: N22_F7|, Resolution: 6
+Fault: N23_F2|, Resolution: 4
+Fault: N19_F2|, Resolution: 4
+Fault: N16_F4|, Resolution: 3
+---------------------
+Max: 6
+Min: 3
+Avg: 4.69
+---------------------
+Running Pattern Group
+---------------------
+0110x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N11_F5|, Resolution: 3
+Fault: N16_F7|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N23_F2|, Resolution: 1
+Fault: N16_F2|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N16_F4|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+---------------------
+Max: 6
+Min: 1
+Avg: 4.90
+---------------------
+Running Pattern Group
+---------------------
+001xx
+---------------------
+Fault: N10_F2|, Resolution: 7
+Fault: N16_F2|, Resolution: 7
+Fault: N10_F5|, Resolution: 7
+Fault: N10_F7|, Resolution: 7
+Fault: N22_F2|, Resolution: 7
+Fault: N22_F4|, Resolution: 7
+Fault: N22_F7|, Resolution: 7
+---------------------
+Max: 7
+Min: 7
+Avg: 7.00
+---------------------
+Running Pattern Group
+---------------------
+0100x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N16_F4|, Resolution: 6
+Fault: N11_F6|, Resolution: 3
+Fault: N16_F2|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N23_F2|, Resolution: 1
+Fault: N22_F2|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N16_F7|, Resolution: 6
+Fault: N11_F4|, Resolution: 3
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+0110x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N16_F7|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N16_F4|, Resolution: 6
+Fault: N11_F5|, Resolution: 3
+Fault: N22_F2|, Resolution: 6
+Fault: N23_F2|, Resolution: 1
+Fault: N16_F2|, Resolution: 6
+Fault: N11_F7|, Resolution: 3
+Fault: N22_F5|, Resolution: 6
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+0111x
+---------------------
+Fault: N10_F2|, Resolution: 6
+Fault: N16_F5|, Resolution: 6
+Fault: N23_F2|, Resolution: 4
+Fault: N19_F2|, Resolution: 4
+Fault: N10_F5|, Resolution: 6
+Fault: N23_F7|, Resolution: 4
+Fault: N22_F7|, Resolution: 6
+Fault: N11_F2|, Resolution: 6
+Fault: N23_F4|, Resolution: 4
+Fault: N11_F7|, Resolution: 6
+Fault: N22_F4|, Resolution: 6
+Fault: N16_F7|, Resolution: 6
+Fault: N10_F7|, Resolution: 6
+Fault: N11_F4|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N16_F2|, Resolution: 6
+---------------------
+Max: 6
+Min: 4
+Avg: 5.50
+---------------------
+Running Pattern Group
+---------------------
+100x1
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N19_F2|, Resolution: 7
+Fault: N19_F4|, Resolution: 7
+Fault: N23_F5|, Resolution: 7
+Fault: N22_F2|, Resolution: 9
+Fault: N19_F7|, Resolution: 7
+Fault: N16_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+Fault: N23_F2|, Resolution: 7
+Fault: N23_F7|, Resolution: 7
+Fault: N11_F2|, Resolution: 7
+Fault: N10_F7|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+---------------------
+Max: 9
+Min: 7
+Avg: 8.12
+---------------------
+Running Pattern Group
+---------------------
+0110x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N16_F2|, Resolution: 6
+Fault: N16_F7|, Resolution: 6
+Fault: N16_F4|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N11_F5|, Resolution: 3
+Fault: N22_F5|, Resolution: 6
+Fault: N23_F2|, Resolution: 1
+Fault: N11_F2|, Resolution: 3
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+1100x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N22_F5|, Resolution: 6
+Fault: N11_F6|, Resolution: 3
+Fault: N11_F4|, Resolution: 3
+Fault: N23_F2|, Resolution: 1
+Fault: N16_F7|, Resolution: 6
+Fault: N16_F4|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N16_F2|, Resolution: 6
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+1111x
+---------------------
+Fault: N10_F2|, Resolution: 6
+Fault: N11_F2|, Resolution: 10
+Fault: N10_F4|, Resolution: 6
+Fault: N10_F7|, Resolution: 6
+Fault: N11_F7|, Resolution: 10
+Fault: N22_F7|, Resolution: 6
+Fault: N16_F2|, Resolution: 10
+Fault: N22_F2|, Resolution: 6
+Fault: N23_F2|, Resolution: 10
+Fault: N22_F5|, Resolution: 6
+Fault: N11_F4|, Resolution: 10
+Fault: N19_F2|, Resolution: 10
+Fault: N16_F5|, Resolution: 10
+Fault: N23_F4|, Resolution: 10
+Fault: N16_F7|, Resolution: 10
+Fault: N23_F7|, Resolution: 10
+---------------------
+Max: 10
+Min: 6
+Avg: 8.50
+---------------------
+Running Pattern Group
+---------------------
+1110x
+---------------------
+Fault: N22_F2|, Resolution: 3
+Fault: N11_F2|, Resolution: 4
+Fault: N23_F2|, Resolution: 4
+Fault: N11_F7|, Resolution: 4
+Fault: N11_F5|, Resolution: 4
+Fault: N22_F6|, Resolution: 3
+Fault: N23_F2|, Resolution: 4
+---------------------
+Max: 4
+Min: 3
+Avg: 3.71
+---------------------
+Running Pattern Group
+---------------------
+010x0
+---------------------
+Fault: N11_F2|, Resolution: 4
+Fault: N22_F2|, Resolution: 3
+Fault: N23_F5|, Resolution: 3
+Fault: N22_F5|, Resolution: 3
+Fault: N23_F7|, Resolution: 3
+Fault: N22_F7|, Resolution: 3
+Fault: N16_F2|, Resolution: 4
+Fault: N16_F7|, Resolution: 4
+Fault: N16_F4|, Resolution: 4
+Fault: N16_F4|, Resolution: 4
+---------------------
+Max: 4
+Min: 3
+Avg: 3.50
+---------------------
+Running Pattern Group
+---------------------
+000xx
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N10_F6|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N10_F4|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+---------------------
+Max: 9
+Min: 9
+Avg: 9.00
+---------------------
+Running Pattern Group
+---------------------
+100xx
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N10_F7|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+---------------------
+Max: 9
+Min: 9
+Avg: 9.00
+---------------------
+Running Pattern Group
+---------------------
+100x1
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N11_F2|, Resolution: 7
+Fault: N23_F7|, Resolution: 7
+Fault: N10_F5|, Resolution: 9
+Fault: N23_F5|, Resolution: 7
+Fault: N19_F4|, Resolution: 7
+Fault: N16_F7|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N19_F7|, Resolution: 7
+Fault: N16_F5|, Resolution: 9
+Fault: N11_F2|, Resolution: 7
+Fault: N19_F2|, Resolution: 7
+Fault: N10_F7|, Resolution: 9
+Fault: N23_F2|, Resolution: 7
+---------------------
+Max: 9
+Min: 7
+Avg: 8.00
+---------------------
+Running Pattern Group
+---------------------
+0101x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N22_F7|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N11_F5|, Resolution: 3
+Fault: N16_F7|, Resolution: 6
+Fault: N11_F7|, Resolution: 3
+Fault: N22_F2|, Resolution: 6
+Fault: N23_F2|, Resolution: 1
+Fault: N16_F2|, Resolution: 6
+Fault: N11_F5|, Resolution: 3
+---------------------
+Max: 6
+Min: 1
+Avg: 4.30
+---------------------
+Running Pattern Group
+---------------------
+1001x
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N10_F7|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+---------------------
+Max: 9
+Min: 9
+Avg: 9.00
+---------------------
+Running Pattern Group
+---------------------
+000x1
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N23_F7|, Resolution: 7
+Fault: N23_F2|, Resolution: 7
+Fault: N22_F7|, Resolution: 9
+Fault: N19_F2|, Resolution: 7
+Fault: N23_F5|, Resolution: 7
+Fault: N19_F4|, Resolution: 7
+Fault: N11_F2|, Resolution: 7
+Fault: N19_F7|, Resolution: 7
+Fault: N10_F4|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N10_F6|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+Fault: N19_F2|, Resolution: 7
+Fault: N16_F7|, Resolution: 9
+---------------------
+Max: 9
+Min: 7
+Avg: 8.00
+---------------------
+Running Pattern Group
+---------------------
+110x1
+---------------------
+Fault: N11_F2|, Resolution: 1
+Fault: N22_F2|, Resolution: 6
+Fault: N16_F2|, Resolution: 6
+Fault: N16_F4|, Resolution: 6
+Fault: N16_F7|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N23_F6|, Resolution: 3
+Fault: N22_F7|, Resolution: 6
+Fault: N23_F2|, Resolution: 3
+Fault: N23_F4|, Resolution: 3
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+001xx
+---------------------
+Fault: N10_F2|, Resolution: 7
+Fault: N22_F4|, Resolution: 7
+Fault: N16_F2|, Resolution: 7
+Fault: N22_F7|, Resolution: 7
+Fault: N10_F5|, Resolution: 7
+Fault: N10_F7|, Resolution: 7
+Fault: N22_F2|, Resolution: 7
+---------------------
+Max: 7
+Min: 7
+Avg: 7.00
+---------------------
+Running Pattern Group
+---------------------
+100xx
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+Fault: N10_F7|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+---------------------
+Max: 9
+Min: 9
+Avg: 9.00
+---------------------
+Running Pattern Group
+---------------------
+0010x
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+Fault: N16_F7|, Resolution: 9
+Fault: N16_F5|, Resolution: 9
+Fault: N10_F7|, Resolution: 9
+Fault: N22_F7|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+---------------------
+Max: 9
+Min: 9
+Avg: 9.00
+---------------------
+Running Pattern Group
+---------------------
+101x0
+---------------------
+Fault: N10_F2|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N10_F7|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N10_F4|, Resolution: 6
+Fault: N22_F7|, Resolution: 6
+---------------------
+Max: 6
+Min: 6
+Avg: 6.00
+---------------------
+Running Pattern Group
+---------------------
+100x0
+---------------------
+---------------------
+Max: 0
+Min: 1000
+Avg: -nan
+---------------------
+Running Pattern Group
+---------------------
+100x0
+---------------------
+---------------------
+Max: 0
+Min: 1000
+Avg: -nan
+---------------------
+Running Pattern Group
+---------------------
+001xx
+---------------------
+Fault: N10_F2|, Resolution: 7
+Fault: N22_F4|, Resolution: 7
+Fault: N16_F2|, Resolution: 7
+Fault: N22_F7|, Resolution: 7
+Fault: N10_F5|, Resolution: 7
+Fault: N22_F2|, Resolution: 7
+Fault: N10_F7|, Resolution: 7
+---------------------
+Max: 7
+Min: 7
+Avg: 7.00
+---------------------
+Running Pattern Group
+---------------------
+0110x
+---------------------
+Fault: N11_F2|, Resolution: 3
+Fault: N11_F7|, Resolution: 3
+Fault: N16_F4|, Resolution: 6
+Fault: N16_F7|, Resolution: 6
+Fault: N16_F2|, Resolution: 6
+Fault: N22_F5|, Resolution: 6
+Fault: N22_F2|, Resolution: 6
+Fault: N11_F7|, Resolution: 3
+Fault: N23_F2|, Resolution: 1
+Fault: N22_F7|, Resolution: 6
+---------------------
+Max: 6
+Min: 1
+Avg: 4.60
+---------------------
+Running Pattern Group
+---------------------
+100x1
+---------------------
+Fault: N10_F2|, Resolution: 9
+Fault: N23_F2|, Resolution: 7
+Fault: N19_F2|, Resolution: 7
+Fault: N16_F5|, Resolution: 9
+Fault: N16_F2|, Resolution: 9
+Fault: N19_F7|, Resolution: 7
+Fault: N22_F7|, Resolution: 9
+Fault: N10_F5|, Resolution: 9
+Fault: N22_F2|, Resolution: 9
+Fault: N23_F7|, Resolution: 7
+Fault: N16_F7|, Resolution: 9
+Fault: N22_F4|, Resolution: 9
+Fault: N11_F2|, Resolution: 7
+Fault: N23_F5|, Resolution: 7
+Fault: N19_F4|, Resolution: 7
+Fault: N10_F7|, Resolution: 9
+---------------------
+Max: 9
+Min: 7
+Avg: 8.12
+---------------------

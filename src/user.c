@@ -876,7 +876,8 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 	char* picked_faults;
 	char* unique_faults[Muf];
 	char pick_fault[Mchf];
-	int pattern_index, i, j, k, flist_count, mark_count, unique_count, resolution, init_flist_count;
+	int pattern_index, i, j, k, flist_count, mark_count, unique_count,
+		resolution, init_flist_count, min_res, max_res, avg_res;
 
 	pattern_index = 0;
 	flist_count = 0;
@@ -902,6 +903,10 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 			// build unique fault list
 			unique_count = buildUniqueFaultList(fault_lists, unique_faults, init_flist_count);
 
+			max_res = 0;
+			avg_res = 0;
+			min_res = Mres;
+
 			// pick random fault
 			for (j = 0; j < Mflr; j++) {
 				for (i = 0; i < Mfl; i++) {
@@ -918,6 +923,10 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 				dropFaults(marked_lists, unmarked_lists, temp_marked_lists, mark_count, flist_count - mark_count);
 				resolution = findCommonFaults(temp_marked_lists, mark_count);
 
+				if (resolution > max_res) max_res = resolution;
+				if (resolution < min_res) min_res = resolution;
+				avg_res += resolution;
+
 				fprintf(resFP, "Fault: %s, Resolution: %d\n", pick_fault, resolution);
 
 				for (i = 0; i < Mfl; i++) {
@@ -927,6 +936,10 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 
 			}
 
+			fprintf(resFP, "---------------------\n");
+			fprintf(resFP, "Max: %d\n", max_res);
+			fprintf(resFP, "Min: %d\n", min_res);
+			fprintf(resFP, "Avg: %.2f\n", (float)avg_res / j);
 			fprintf(resFP, "---------------------\n");
 
 			for (i = 0; i < Mfl; i++) free(fault_lists[i]);
@@ -942,6 +955,7 @@ void reportResolutions(NODE* graph, int max, int group, char* prefix) {
 	}
 
 	for (i = 0; i < Muf; i++) free(unique_faults[i]);
+	for (i = 0; i < pattern_index; i++) free(pattern_list[i]);
 
 	fclose(patternsFP);
 	fclose(resFP);
@@ -992,7 +1006,7 @@ void dropFaults(char** marked_lists, char** unmarked_lists, char** new_marked_li
 						duplicate = 1;
 						break;
 					}
-				} 
+				}
 
 				if (!duplicate) sprintf(new_marked_lists[i], "%s%s\n", new_marked_lists[i], linem);
 

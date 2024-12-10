@@ -5,7 +5,7 @@
 void main(int argc, char** argv)
 {
     FILE* fbench, * fvec, * ffau, * fres;             //file pointers used for .isc file, .vec file, .faults file and resultfile
-    int dupli_max, Opt, Npi, Npo, Total, Tfs, orig_max, group;              //maxnode id,option,tot no of PIs,tot no of Pos,Tot no of input patterns& faults in.vec in.faults
+    int dupli_max, Opt, Npi, Npo, Total, Tfs, orig_max, group, p1, p2, p3;              //maxnode id,option,tot no of PIs,tot no of Pos,Tot no of input patterns& faults in.vec in.faults
 
     NODE graph[Mnod], new_graph[Mnod];                         //structure used to store the ckt information in .isc file
     int a, b, c, d;                             //random variables
@@ -17,11 +17,14 @@ void main(int argc, char** argv)
 
     // argv settings
     group = (argc > 2) ? atoi(argv[2]) : 1; // Default value is 1 if argv[2] is not present
+    p1 = (argc > 3) ? atoi(argv[3]) : 1; // Default value is 1 if argv[3] is not present
+    p2 = (argc > 4) ? atoi(argv[4]) : 1; // Default value is 1 if argv[4] is not present
+    p3 = (argc > 5) ? atoi(argv[5]) : 1; // Default value is 1 if argv[5] is not present
 
     printf("Group: %s\n", argv[1]);
 
     // clean the outputs directory
-    system("rm -rf out/*");
+    if (p1) system("rm -rf out/*");
 
     // Read the .bench file and store the information in graph structure
     sprintf(filename1, "bench/%s.bench", argv[1]);
@@ -36,42 +39,46 @@ void main(int argc, char** argv)
     dupli_max = duplicateCircuit(graph, new_graph, orig_max);
     PrintCircuit(new_graph, dupli_max);                 //print all members of graph structure
 
-    // Write the .bench file for the duplicated circuit
-    sprintf(filename1, "out/%s.bench", argv[1]);
-    fbench = fopen(filename1, "w");
-    writeBench(new_graph, fbench, dupli_max);
+    if (p1) {
+        // Write the .bench file for the duplicated circuit
+        sprintf(filename1, "out/%s.bench", argv[1]);
+        fbench = fopen(filename1, "w");
+        writeBench(new_graph, fbench, dupli_max);
 
-    // Write the .vec file for the duplicated circuit
-    sprintf(filename1, "out/%s.fault", argv[1]);
-    writeFaultFile(dupli_max, filename1);
+        // Write the .vec file for the duplicated circuit
+        sprintf(filename1, "out/%s.fault", argv[1]);
+        writeFaultFile(dupli_max, filename1);
 
-    // Write all faulty circuits and run ATALANTA
-    sprintf(filename1, "out/%s", argv[1]);
-    writeAllErrors(new_graph, dupli_max, orig_max, filename1);
-    runATALANTABatch(filename1);
+        // Write all faulty circuits and run ATALANTA
+        sprintf(filename1, "out/%s", argv[1]);
+        writeAllErrors(new_graph, dupli_max, orig_max, filename1);
+        runATALANTABatch(filename1);
 
-    // Pick pattern groups of 1
-    sprintf(filename1, "out/%s/", argv[1]);
-    sprintf(filename2, "out/%s_g1.pattern", argv[1]);
-    writePatterns(filename1, 500, 1, filename2);
+        // Pick pattern groups of 1
+        sprintf(filename1, "out/%s/", argv[1]);
+        sprintf(filename2, "out/%s_g1.pattern", argv[1]);
+        writePatterns(filename1, 500, 1, filename2);
 
-    // Pick pattern groups of 2
-    sprintf(filename2, "out/%s_g2.pattern", argv[1]);
-    writePatterns(filename1, 500, 2, filename2);
+        // Pick pattern groups of 2
+        sprintf(filename2, "out/%s_g2.pattern", argv[1]);
+        writePatterns(filename1, 500, 2, filename2);
 
-    // Pick pattern groups of 3
-    sprintf(filename2, "out/%s_g3.pattern", argv[1]);
-    writePatterns(filename1, 50, 3, filename2);
+        // Pick pattern groups of 3
+        sprintf(filename2, "out/%s_g3.pattern", argv[1]);
+        writePatterns(filename1, 50, 3, filename2);
 
-    // Pick pattern groups of 4
-    sprintf(filename2, "out/%s_g4.pattern", argv[1]);
-    writePatterns(filename1, 500, 4, filename2);
+        // Pick pattern groups of 4
+        sprintf(filename2, "out/%s_g4.pattern", argv[1]);
+        writePatterns(filename1, 500, 4, filename2);
+    }
 
-    // Select unique patterns from group and run all faults
-    getUniquePatterns(argv[1], pattern_list, group);
-    runAllFaults(graph, orig_max, pattern_list, argv[1]);           //close file pointer for .out file
+    if (p2) {
+        // Select unique patterns from group and run all faults
+        getUniquePatterns(argv[1], pattern_list, group);
+        runAllFaults(graph, orig_max, pattern_list, argv[1]);           //close file pointer for .out file
+    }
 
-    reportResolutions(graph, orig_max, group, argv[1]);
+    if (p3) reportResolutions(graph, orig_max, group, argv[1]);
 
     ClearCircuit(graph, Mnod);                                      //clear memeory for all members of graph
 
