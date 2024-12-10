@@ -1,0 +1,617 @@
+Begin Pattern |101xx|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |0011x|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F4|
+N16_F6|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N16_F2|
+N16_F4|
+N16_F6|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |110xx|
+Begin PO |0|
+N11_F2|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |001xx|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |1100x|
+Begin PO |0|
+N11_F2|
+N11_F4|
+N11_F6|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F4|
+N11_F6|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |0111x|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N11_F2|
+N11_F4|
+N11_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F4|
+N11_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |000x1|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F6|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N19_F2|
+N19_F4|
+N19_F7|
+N23_F2|
+N23_F5|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |100x1|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N19_F2|
+N19_F4|
+N19_F7|
+N23_F2|
+N23_F5|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |1101x|
+Begin PO |0|
+N11_F2|
+N11_F5|
+N11_F7|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F5|
+N11_F7|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |1100x|
+Begin PO |0|
+N11_F2|
+N11_F4|
+N11_F6|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F4|
+N11_F6|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |1111x|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F4|
+N11_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |1110x|
+Begin PO |0|
+N22_F2|
+N22_F4|
+N22_F6|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F5|
+N11_F7|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |100x1|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N19_F2|
+N19_F4|
+N19_F7|
+N23_F2|
+N23_F5|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |000xx|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F6|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |100xx|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |0110x|
+Begin PO |0|
+N11_F2|
+N11_F5|
+N11_F7|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F5|
+N11_F7|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |1110x|
+Begin PO |0|
+N22_F2|
+N22_F4|
+N22_F6|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F5|
+N11_F7|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |1001x|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |100x1|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N19_F2|
+N19_F4|
+N19_F7|
+N23_F2|
+N23_F5|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |110x1|
+Begin PO |0|
+N11_F2|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N23_F2|
+N23_F4|
+N23_F6|
+End PO
+
+End Pattern
+
+Begin Pattern |1110x|
+Begin PO |0|
+N22_F2|
+N22_F4|
+N22_F6|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F5|
+N11_F7|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |100xx|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |100xx|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+End PO
+
+End Pattern
+
+Begin Pattern |101x0|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N16_F2|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |101x0|
+Begin PO |0|
+N10_F2|
+N10_F4|
+N10_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N16_F2|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |100x0|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N16_F2|
+N16_F5|
+N16_F7|
+N19_F2|
+N19_F5|
+N19_F7|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |x10xx|
+Begin PO |0|
+N11_F2|
+N16_F2|
+N16_F4|
+N16_F7|
+N22_F2|
+N22_F5|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N23_F2|
+End PO
+
+End Pattern
+
+Begin Pattern |0111x|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N11_F2|
+N11_F4|
+N11_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N11_F4|
+N11_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N19_F2|
+N23_F2|
+N23_F4|
+N23_F7|
+End PO
+
+End Pattern
+
+Begin Pattern |100x1|
+Begin PO |0|
+N10_F2|
+N10_F5|
+N10_F7|
+N16_F2|
+N16_F5|
+N16_F7|
+N22_F2|
+N22_F4|
+N22_F7|
+End PO
+
+Begin PO |1|
+N11_F2|
+N19_F2|
+N19_F4|
+N19_F7|
+N23_F2|
+N23_F5|
+N23_F7|
+End PO
+
+End Pattern
+
