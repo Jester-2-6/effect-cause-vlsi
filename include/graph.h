@@ -17,7 +17,7 @@ Constant Declarations
 // VARIOUS CONSTANTS
 #define Mfnam     200			// max size for a file name
 #define Mnod    15000 		        // max number of nodes in a graph/node
-#define Mlin      200			// max size of characters in a line
+#define Mlin      250			// max size of characters in a line
 #define Mnam       25			// max size of a node name
 #define Mtyp       10			// max type of nodes/gates
 #define Mout       16		        // max node out degree (Nfo)
@@ -26,11 +26,13 @@ Constant Declarations
 #define Mpo       140			// max number of primary outputs
 #define Mpt       500			// max number of input patterns in .vec file
 #define Mft       10			// max number of stuck at faults in .faults file
-#define Mfl       100			// max number of fault lists read at a time
-#define Mfpl      100			// max number of faults per list
-#define Mchf      200			// max number of characters in a fault name
-#define Mflr      150			// max number of faults to check resolution
-#define Mrd      250			// max number of retries for random fault picking
+#define Mfl       1000			// max number of fault lists read at a time
+#define Mfpl      1000			// max number of faults per list
+#define Mchf      50			// max number of characters in a fault name
+#define Mflr      500			// max number of faults to check resolution
+#define Mrd       250			// max number of retries for random fault picking
+#define Muf       1000			// max number of unique faults
+#define Mres      1000			// max resolution
 
 // NODE TYPE CONSTANTS 
 #define INPT 1				// Primary Input
@@ -141,7 +143,7 @@ void reportResolutions(NODE*, int, int, char*);
 int validFaultLists(char**, char**, char*, int);
 void readSequence(char[], char[], char[]);
 int markLists(char**, int*, char*, char**, char**);
-void pickRandomFault(char**, char**, char*, int);
+void pickRandomFault(char**, char*, char*, int);
 int buildUniqueFaultList(char**, char**, int);
 int findCommonFaults(char**, int);
 void dropFaults(char**, char**, char**, int, int);

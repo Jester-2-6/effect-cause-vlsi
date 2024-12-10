@@ -90,3 +90,6 @@ project
 *.pattern
 *.result
 *.resolutions
+
+# exclution
+!persist/*
